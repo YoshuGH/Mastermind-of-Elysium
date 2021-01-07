@@ -5,8 +5,11 @@ using UnityEngine;
 public class BattleGround : MonoBehaviour
 {
     [SerializeField]private GameObject planet;
+    private Transform battleGroundTransform;
     private int nodeQty;
     private List<Node> nodes;
+    private string layerMaskNode = "Nodes";
+   
 
     [Header("Tamaño")]
     public float bgWidth, bgLength, bgHeight;
@@ -15,6 +18,7 @@ public class BattleGround : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        battleGroundTransform = this.transform;
         nodeQty = GenerateRandomNodeQty(3);
         nodes = new List<Node>();
         InitBattlegroundGraph();
@@ -52,22 +56,27 @@ public class BattleGround : MonoBehaviour
 
         for(int i = 0; i < nodeQty; i++){
             if(i == 0){
-                tempNode = Instantiate(planet, spawnNodePoint, Quaternion.identity).GetComponent<Node>();
+                tempNode = Instantiate(planet, spawnNodePoint, Quaternion.identity, battleGroundTransform).GetComponent<Node>();
+                Debug.Log("Primer nodo instanciado en " + spawnNodePoint);
                 nodes.Add(tempNode); 
             }
+
             if(currentNodes >= nodeQty)
                 break;
 
             int neighboursQty = Random.Range(2, 4);
 
             for(int j = 1; j <= neighboursQty; j++){
+                bool canSpawn;
+
                 if(currentNodes < nodeQty){
                     do{
                         spawnNodePoint = RandomUniformPointInSphere(nodes[i].transform.position, true);
-                    }while(spawnNodePoint.y <= 0f);
+                        canSpawn = CanSpawnANode(spawnNodePoint);
+                        Debug.Log("Posicion del nodo: " + nodes[i].transform.position + ", punto en el que spawnear el nuevo nodo: " + spawnNodePoint + ", la funcion dice que puede aparecer: " + canSpawn);
+                    }while(!canSpawn);
                     
-                   
-                    tempNode = Instantiate(planet, spawnNodePoint, Quaternion.identity).GetComponent<Node>();
+                    tempNode = Instantiate(planet, spawnNodePoint, Quaternion.identity, battleGroundTransform).GetComponent<Node>();
                     nodes.Add(tempNode);
                     currentNodes = nodes.Count;
                     nodes[i].AddNeighbor(nodes[currentNodes - 1]);
@@ -75,15 +84,31 @@ public class BattleGround : MonoBehaviour
                 }
             }
         }
-       
-
-        
     }
 
+    private void OnDrawGizmos(){
+        foreach(Node node in nodes){
+            foreach(Node subNode in node.Neighbors){
+                Gizmos.color = Color.blue;
+                Gizmos.DrawLine(node.transform.position, subNode.transform.position);
+            }
+        }
+    }
+
+    private bool CanSpawnANode(Vector3 _pos){
+        Collider[] hitColliders = Physics.OverlapSphere(_pos, 2.5f, layerMaskNode.GetHashCode());
+
+        if(hitColliders.Length > 0 &&  _pos.y <= 0.5f){
+            Debug.Log("Hay en medio " + hitColliders.Length + " nodos y la posicion en la que intenta aparecer es " + _pos);
+            return false;
+        } else {
+            return true;
+        }
+    }
 
     private Vector3 RandomUniformPointInSphere(Vector3 _pos, bool excludeCenter){
         if(excludeCenter)
-            return (Random.onUnitSphere * Mathf.Sqrt(Random.Range(0f, 1f))) * 2.5f + _pos;
+            return (Random.onUnitSphere * Mathf.Sqrt(Random.Range(0f, 1f))) * 3.5f + _pos;
         else 
             return (Random.insideUnitSphere * Mathf.Sqrt(Random.Range(0f, 1f))) * 0.5f + _pos;
     }
