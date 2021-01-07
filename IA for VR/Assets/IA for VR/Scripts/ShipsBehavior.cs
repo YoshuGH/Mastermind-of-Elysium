@@ -11,22 +11,33 @@ public class ShipsBehavior : MonoBehaviour
     private Vector3 PuntoB; //Punto B para Lerp
     private float t; //Factor tiempo de Lerp
     private float factorT; //Factor de moviento
+    private bool oneTime = false, lastPoint = false;
 
 
     public float speed = 2f;
-    public Transform[] puntos;
+    public List<Transform> puntos;
+    public SpawnManager spawn;
 
     // Start is called before the first frame update
     void Start()
     {
-        t = 1f; //Esto ayuda al primer calculo
-        CalcularValores();
+        puntos = new List<Transform>();
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        Lerp();
+        if(puntos.Count > 0)
+        {
+            if(!oneTime)
+            {
+                t = 1f; //Esto ayuda al primer calculo
+                CalcularValores();
+                oneTime = true;
+            }
+            Lerp();
+        }
     }
 
     void Lerp()
@@ -35,14 +46,27 @@ public class ShipsBehavior : MonoBehaviour
         if (t >= 1f) //ya llegamos?
         {
             IndexActual++;
-            if (IndexActual == puntos.Length - 1) //Ya es el ultimo tramo?
+            if (IndexActual == puntos.Count - 1) //Ya es el ultimo tramo?
             {
                 IndexActual = 0;
+                lastPoint = true;
             }
-            CalcularValores();
+            if(puntos.Count > 0)
+            {
+                CalcularValores();
+            }
         }
-
-        transform.position = Vector3.Lerp(PuntoA, PuntoB, t);
+        
+        if(puntos.Count > 0)
+        {
+            transform.position = Vector3.Lerp(PuntoA, PuntoB, t);
+            if(lastPoint)
+            {
+                puntos.Clear();
+                lastPoint = false;
+            }
+        }
+        
     }
 
 
