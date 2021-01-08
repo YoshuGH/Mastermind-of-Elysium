@@ -9,6 +9,7 @@ VR Final/[Bb]uild/
 VR Final/[Bb]uilds/
 VR Final/[Ll]ogs/
 VR Final/[Mm]emoryCaptures/
+VR Final/.vscode
 
 IA for VR/[Ll]ibrary/
 IA for VR/[Tt]emp/
@@ -17,6 +18,7 @@ IA for VR/[Bb]uild/
 IA for VR/[Bb]uilds/
 IA for VR/[Ll]ogs/
 IA for VR/[Mm]emoryCaptures/
+IA for VR/.vscode
 
 # Never ignore Asset meta data
 !VR Final/[Aa]ssets/**/*.meta
