@@ -10,20 +10,23 @@ public class BattleGround : MonoBehaviour
     private int nodeQty;
     private List<Node> nodes;
     private List<Vector3> transformNodes;
-    private string layerMaskNode = "Nodes";
+    LayerMask nodeLayerMask = 9;
     [SerializeField]private float minDistanceBetweenNodes, maxDistanceBetweenNodes;
 
     public float bgWidth, bgLength, bgHeight;
     
-
-    // Start is called before the first frame update
-    void Start()
-    {
+    private void Awake() {
         battleGroundTransform = this.transform;
         nodeQty = GenerateRandomNodeQty(3);
         nodes = new List<Node>();
         transformNodes = new List<Vector3>();
         InitBattlegroundGraph();
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        
     }
 
     public int GenerateRandomNodeQty(int _battlegroundSize)
@@ -84,12 +87,53 @@ public class BattleGround : MonoBehaviour
     }
 
     private void NormalizeBattleGroundGraph(){
+        float nearestDistance = 100f;
+        Node nearestNode = null;
+        int pos1, pos2;
+
         foreach(Node node in nodes){
             if(node.Neighbors.Count < 2){
-                Collider[] hitColliders = Physics.OverlapSphere(node.transform.position, maxDistanceBetweenNodes);
-                Debug.Log("El nodo en la posicion " + node.transform.position + "tiene solo una conexion pero puede conectarse a " + hitColliders);
+                foreach(Node subNode in nodes){
+                    float distanceToNode = Vector3.Distance(node.transform.position, subNode.transform.position);
+                    if(distanceToNode > 0f && !isAlreadyANeighbour(node, subNode))
+                    {
+                        if(distanceToNode < nearestDistance)
+                        {
+                            nearestDistance = distanceToNode;
+                            nearestNode = subNode;
+                        }  
+                    }
+                }
+                
+                //Esto esta al limite del hardcode, but fuck it...... it's 4am
+                //Busco en que posicion de la lista esta
+                pos1 = HardCodeShit(node);
+                pos2 = HardCodeShit(nearestNode);
+
+                nodes[pos1].AddNeighbor(nodes[pos2]);
+                nodes[pos2].AddNeighbor(nodes[pos1]);
             }
         }
+
+    }
+
+    private bool isAlreadyANeighbour(Node node1,  Node node2){
+        foreach(Node node in node1.Neighbors){
+            if(node == node2)
+                return true;
+        }
+
+        return false;
+    }
+
+    private int HardCodeShit(Node nodeInSearch){
+        for(int i = 0; i < nodes.Count; i++){
+            if(nodes[i] == nodeInSearch){
+                return i;
+            }
+        }
+
+        return 0;
     }
 
     private void OnDrawGizmos(){
@@ -104,7 +148,7 @@ public class BattleGround : MonoBehaviour
     private bool CanSpawnANode(Vector3 _pos){
         Collider[] hitColliders = Physics.OverlapSphere(_pos, minDistanceBetweenNodes);
 
-        if(hitColliders.Length > 0  ||  _pos.y <= 0.5f)
+        if(hitColliders.Length > 0  ||  _pos.y <= 0.5f || _pos.y >= bgHeight - 0.5f) 
             return false;
         else 
             return true;
