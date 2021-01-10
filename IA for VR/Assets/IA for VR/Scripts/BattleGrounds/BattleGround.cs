@@ -4,13 +4,11 @@ using UnityEngine;
 
 public class BattleGround : MonoBehaviour
 {
-    [SerializeField]private GameObject planet;
-    [SerializeField]private GameObject planetWithResources;
+    [SerializeField]private GameObject planetWithoutResources, planetWithResources;
+    [SerializeField]private float ResourcesRatio;
     private Transform battleGroundTransform;
     private int nodeQty;
     private List<Node> nodes;
-    private List<Vector3> transformNodes;
-    LayerMask nodeLayerMask = 9;
     [SerializeField]private float minDistanceBetweenNodes, maxDistanceBetweenNodes;
 
     public float bgWidth, bgLength, bgHeight;
@@ -19,7 +17,6 @@ public class BattleGround : MonoBehaviour
         battleGroundTransform = this.transform;
         nodeQty = GenerateRandomNodeQty(3);
         nodes = new List<Node>();
-        transformNodes = new List<Vector3>();
         InitBattlegroundGraph();
     }
 
@@ -54,7 +51,7 @@ public class BattleGround : MonoBehaviour
 
         for(int i = 0; i < nodeQty; i++){
             if(i == 0){ //Primer nodo
-                tempNode = Instantiate(planet, spawnNodePoint, Quaternion.identity, battleGroundTransform).GetComponent<Node>();
+                tempNode = Instantiate(planetWithResources, spawnNodePoint, Quaternion.identity, battleGroundTransform).GetComponent<Node>();
                 nodes.Add(tempNode); 
             }
 
@@ -73,7 +70,7 @@ public class BattleGround : MonoBehaviour
                         canSpawn = CanSpawnANode(spawnNodePoint);
                     }while(!canSpawn);
                     
-                    tempNode = Instantiate(planet, spawnNodePoint, Quaternion.identity, battleGroundTransform).GetComponent<Node>();
+                    tempNode = Instantiate(planetWithoutResources, spawnNodePoint, Quaternion.identity, battleGroundTransform).GetComponent<Node>();
 
                     nodes.Add(tempNode);
                     currentNodes = nodes.Count;

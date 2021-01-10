@@ -150,9 +150,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa4358f2b0cf8bd488831069ae776679, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  planet: {fileID: 9152900134488254661, guid: 68124712e48fcc34ca8020a16e0ac628, type: 3}
+  planetWithoutResources: {fileID: 9152900134488254661, guid: 68124712e48fcc34ca8020a16e0ac628,
+    type: 3}
   planetWithResources: {fileID: 971940795385444808, guid: 17af179fcfa33e24699b9ee7ef17a916,
     type: 3}
+  ResourcesRatio: 30
   minDistanceBetweenNodes: 1
   maxDistanceBetweenNodes: 2.3
   bgWidth: 20
