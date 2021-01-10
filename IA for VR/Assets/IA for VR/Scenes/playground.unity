@@ -151,6 +151,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   planet: {fileID: 9152900134488254661, guid: 68124712e48fcc34ca8020a16e0ac628, type: 3}
+  planetWithResources: {fileID: 971940795385444808, guid: 17af179fcfa33e24699b9ee7ef17a916,
+    type: 3}
+  minDistanceBetweenNodes: 1
+  maxDistanceBetweenNodes: 2.3
   bgWidth: 20
   bgLength: 20
   bgHeight: 5

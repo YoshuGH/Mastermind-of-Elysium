@@ -13,7 +13,7 @@ public class Node :  MonoBehaviour
     public void AddNeighbor(Node _node) => neighbors.Add(_node);
     public void DeleteNeighbor(int _index) => neighbors.RemoveAt(_index);
     
-
+    
     
 
 }

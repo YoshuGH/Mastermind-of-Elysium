@@ -5,13 +5,14 @@ using UnityEngine;
 public class BattleGround : MonoBehaviour
 {
     [SerializeField]private GameObject planet;
+    [SerializeField]private GameObject planetWithResources;
     private Transform battleGroundTransform;
     private int nodeQty;
     private List<Node> nodes;
+    private List<Vector3> transformNodes;
     private string layerMaskNode = "Nodes";
-   
+    [SerializeField]private float minDistanceBetweenNodes, maxDistanceBetweenNodes;
 
-    [Header("Tamaño")]
     public float bgWidth, bgLength, bgHeight;
     
 
@@ -21,15 +22,9 @@ public class BattleGround : MonoBehaviour
         battleGroundTransform = this.transform;
         nodeQty = GenerateRandomNodeQty(3);
         nodes = new List<Node>();
+        transformNodes = new List<Vector3>();
         InitBattlegroundGraph();
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
 
     public int GenerateRandomNodeQty(int _battlegroundSize)
     {
@@ -50,17 +45,17 @@ public class BattleGround : MonoBehaviour
 
     private void InitBattlegroundGraph()
     {
-        Vector3 spawnNodePoint = RandomUniformPointInSphere(new Vector3(0f, bgHeight/2, 0f), false);
+        Vector3 spawnNodePoint = RandomUniformPointInSphere(new Vector3(0f, bgHeight/2, 0f));
         Node tempNode;
         int currentNodes = nodes.Count;
 
         for(int i = 0; i < nodeQty; i++){
-            if(i == 0){
+            if(i == 0){ //Primer nodo
                 tempNode = Instantiate(planet, spawnNodePoint, Quaternion.identity, battleGroundTransform).GetComponent<Node>();
-                Debug.Log("Primer nodo instanciado en " + spawnNodePoint);
                 nodes.Add(tempNode); 
             }
 
+            //Verifico si puedo agregar mas nodos
             if(currentNodes >= nodeQty)
                 break;
 
@@ -71,17 +66,28 @@ public class BattleGround : MonoBehaviour
 
                 if(currentNodes < nodeQty){
                     do{
-                        spawnNodePoint = RandomUniformPointInSphere(nodes[i].transform.position, true);
+                        spawnNodePoint = RandomUniformPointInSphere(nodes[i].transform.position);
                         canSpawn = CanSpawnANode(spawnNodePoint);
-                        Debug.Log("Posicion del nodo: " + nodes[i].transform.position + ", punto en el que spawnear el nuevo nodo: " + spawnNodePoint + ", la funcion dice que puede aparecer: " + canSpawn);
                     }while(!canSpawn);
                     
                     tempNode = Instantiate(planet, spawnNodePoint, Quaternion.identity, battleGroundTransform).GetComponent<Node>();
+
                     nodes.Add(tempNode);
                     currentNodes = nodes.Count;
                     nodes[i].AddNeighbor(nodes[currentNodes - 1]);
                     nodes[currentNodes -1].AddNeighbor(nodes[i]);
                 }
+            }
+        }
+
+        NormalizeBattleGroundGraph();
+    }
+
+    private void NormalizeBattleGroundGraph(){
+        foreach(Node node in nodes){
+            if(node.Neighbors.Count < 2){
+                Collider[] hitColliders = Physics.OverlapSphere(node.transform.position, maxDistanceBetweenNodes);
+                Debug.Log("El nodo en la posicion " + node.transform.position + "tiene solo una conexion pero puede conectarse a " + hitColliders);
             }
         }
     }
@@ -96,20 +102,15 @@ public class BattleGround : MonoBehaviour
     }
 
     private bool CanSpawnANode(Vector3 _pos){
-        Collider[] hitColliders = Physics.OverlapSphere(_pos, 2.5f, layerMaskNode.GetHashCode());
+        Collider[] hitColliders = Physics.OverlapSphere(_pos, minDistanceBetweenNodes);
 
-        if(hitColliders.Length > 0 &&  _pos.y <= 0.5f){
-            Debug.Log("Hay en medio " + hitColliders.Length + " nodos y la posicion en la que intenta aparecer es " + _pos);
+        if(hitColliders.Length > 0  ||  _pos.y <= 0.5f)
             return false;
-        } else {
+        else 
             return true;
-        }
     }
 
-    private Vector3 RandomUniformPointInSphere(Vector3 _pos, bool excludeCenter){
-        if(excludeCenter)
-            return (Random.onUnitSphere * Mathf.Sqrt(Random.Range(0f, 1f))) * 3.5f + _pos;
-        else 
-            return (Random.insideUnitSphere * Mathf.Sqrt(Random.Range(0f, 1f))) * 0.5f + _pos;
+    private Vector3 RandomUniformPointInSphere(Vector3 _pos){
+            return (Random.insideUnitSphere * Mathf.Sqrt(Random.Range(0f, 1f))) * maxDistanceBetweenNodes + _pos;
     }
 }
