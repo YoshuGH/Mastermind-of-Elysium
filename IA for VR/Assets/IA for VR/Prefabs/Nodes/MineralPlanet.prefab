@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 167711553727036200}
   - component: {fileID: 5090937885749100164}
   - component: {fileID: 5141724556393919275}
+  - component: {fileID: 6936283502487204124}
   m_Layer: 9
   m_Name: MineralPlanet
   m_TagString: Nodes
@@ -71,6 +72,19 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!135 &6936283502487204124
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 971940795385444808}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7278020662392421098
 GameObject:
   m_ObjectHideFlags: 0
@@ -82,7 +96,6 @@ GameObject:
   - component: {fileID: 4986462151369405149}
   - component: {fileID: 2478126371619152194}
   - component: {fileID: 8559628267022022608}
-  - component: {fileID: 6579192100218548033}
   m_Layer: 0
   m_Name: Planet
   m_TagString: Untagged
@@ -151,19 +164,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!135 &6579192100218548033
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7278020662392421098}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &853621928165284587
 PrefabInstance:
   m_ObjectHideFlags: 0

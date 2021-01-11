@@ -7,19 +7,27 @@ public class InputManager : MonoBehaviour
     // Variables Publicas
     [Header("Prefabs")]
     public GameObject selectionField;
+    public float selectionFieldScale = 3.5f;
 
     //Variables Privadas
     [Header("Managers References")]
     [SerializeField] private GameManager gm;
     [SerializeField] private SpawnManager spawn;
     private GameObject selecField;
+    private List<Node> nodesNearbySelectedNode;
     private int idleSelectedNodeIndex = 0;
     private Node idleSelectedNode;
     private bool selectingNode = false, clickOnce = false, idle = true;
 
+    // Accesores
+    //public bool Idle { get { return idle; } set { idle = value; } }
+
     // Start is called before the first frame update
     void Start()
     {
+        // Inicializacion de listas
+        nodesNearbySelectedNode = new List<Node>();
+
         // Activar el outline de seleccion del nodo, como al principio solo hay un nodo, se activa ese nada mas
         Invoke("OutlineAtStart", 0.11f);
     }
@@ -64,18 +72,27 @@ public class InputManager : MonoBehaviour
             if (Input.GetKeyDown("space"))
             {
                 selectingNode = true;
-                //idle = false;
-                
+                idle = false;
                 selecField = Instantiate(selectionField, idleSelectedNode.GetComponentInParent<Transform>().localPosition, idleSelectedNode.GetComponentInParent<Transform>().localRotation);
-                selecField.transform.localScale = new Vector3(6f, 6f, 6f);
-                print("presione espacio");
+                selecField.transform.localScale = new Vector3(selectionFieldScale, selectionFieldScale, selectionFieldScale);
+
+                Collider[] colliderTempNodes = Physics.OverlapSphere(idleSelectedNode.GetComponentInParent<Transform>().localPosition,
+                    selectionFieldScale/2, LayerMask.GetMask("Nodes"));
+
+                foreach(Collider colliderNodes in colliderTempNodes)
+                {
+                    if(colliderNodes.GetComponentInParent<Node>() != idleSelectedNode)
+                    {
+                        nodesNearbySelectedNode.Add(colliderNodes.GetComponentInParent<Node>());
+                    }
+                }
             }
         }
         #endregion
 
         // Si esta seleccionando un nodo
         #region Selecting Node State
-        if (selectingNode)
+        else if (selectingNode)
         {
             //Si vuelve a presionar espacio estando en seleccion, este cancela la seleccion
             if(Input.GetKeyDown("space"))
@@ -83,6 +100,7 @@ public class InputManager : MonoBehaviour
                 idle = true;
                 selectingNode = false;
                 Destroy(selecField);
+                nodesNearbySelectedNode.Clear();
             }
         }
         #endregion

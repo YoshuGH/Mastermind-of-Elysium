@@ -155,8 +155,8 @@ MonoBehaviour:
   planetWithResources: {fileID: 971940795385444808, guid: 17af179fcfa33e24699b9ee7ef17a916,
     type: 3}
   ResourcesRatio: 0.7
-  minDistanceBetweenNodes: 1
-  maxDistanceBetweenNodes: 2.3
+  minDistanceBetweenNodes: 1.3
+  maxDistanceBetweenNodes: 2.5
   bgWidth: 20
   bgLength: 20
   bgHeight: 5
@@ -410,6 +410,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectionField: {fileID: 5373383816800903429, guid: 8d9ff02325681f14bb796d4e1aeb7b80,
     type: 3}
+  selectionFieldScale: 0
   gm: {fileID: 0}
   spawn: {fileID: 1670333679}
 --- !u!1 &426169627
@@ -1813,6 +1814,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectionField: {fileID: 5373383816800903429, guid: 8d9ff02325681f14bb796d4e1aeb7b80,
     type: 3}
+  selectionFieldScale: 3.5
   gm: {fileID: 1827076793}
   spawn: {fileID: 0}
 --- !u!4 &1862715009
