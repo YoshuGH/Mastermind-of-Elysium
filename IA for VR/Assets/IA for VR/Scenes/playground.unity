@@ -154,7 +154,7 @@ MonoBehaviour:
     type: 3}
   planetWithResources: {fileID: 971940795385444808, guid: 17af179fcfa33e24699b9ee7ef17a916,
     type: 3}
-  ResourcesRatio: 30
+  ResourcesRatio: 0.7
   minDistanceBetweenNodes: 1
   maxDistanceBetweenNodes: 2.3
   bgWidth: 20

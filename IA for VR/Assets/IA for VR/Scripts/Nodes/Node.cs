@@ -5,8 +5,8 @@ using UnityEngine;
 //[CreateAssetMenu(fileName= "NodeData", menuName = "Node/Nodes")]
 public class Node :  MonoBehaviour
 {
-    private int typeResources;
-    public int TypeResources { get { return typeResources; } }
+    [SerializeField]private bool haveResources;
+    public bool HaveResources { get { return haveResources; } }
     public int teamInControl = int.MaxValue;
     [SerializeField]private List<Node> neighbors;
     public List<Node> Neighbors { get { return neighbors; } }

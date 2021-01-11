@@ -5,6 +5,7 @@ using UnityEngine;
 public class BattleGround : MonoBehaviour
 {
     [SerializeField]private GameObject planetWithoutResources, planetWithResources;
+    [Header("0 - 1: Menos es mas")]
     [SerializeField]private float ResourcesRatio;
     private Transform battleGroundTransform;
     private int nodeQty;
@@ -51,7 +52,7 @@ public class BattleGround : MonoBehaviour
 
         for(int i = 0; i < nodeQty; i++){
             if(i == 0){ //Primer nodo
-                tempNode = Instantiate(planetWithResources, spawnNodePoint, Quaternion.identity, battleGroundTransform).GetComponent<Node>();
+                tempNode = Instantiate(ChooseTypeOfPlanet(), spawnNodePoint, Quaternion.identity, battleGroundTransform).GetComponent<Node>();
                 nodes.Add(tempNode); 
             }
 
@@ -70,7 +71,7 @@ public class BattleGround : MonoBehaviour
                         canSpawn = CanSpawnANode(spawnNodePoint);
                     }while(!canSpawn);
                     
-                    tempNode = Instantiate(planetWithoutResources, spawnNodePoint, Quaternion.identity, battleGroundTransform).GetComponent<Node>();
+                    tempNode = Instantiate(ChooseTypeOfPlanet(), spawnNodePoint, Quaternion.identity, battleGroundTransform).GetComponent<Node>();
 
                     nodes.Add(tempNode);
                     currentNodes = nodes.Count;
@@ -153,5 +154,13 @@ public class BattleGround : MonoBehaviour
 
     private Vector3 RandomUniformPointInSphere(Vector3 _pos){
             return (Random.insideUnitSphere * Mathf.Sqrt(Random.Range(0f, 1f))) * maxDistanceBetweenNodes + _pos;
+    }
+    
+
+    private GameObject ChooseTypeOfPlanet(){
+        if(Random.value > ResourcesRatio)
+            return planetWithResources;
+        else 
+            return planetWithoutResources;
     }
 }

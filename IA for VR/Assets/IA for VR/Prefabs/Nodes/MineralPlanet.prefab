@@ -49,6 +49,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb09148341a3fb4409279481f31bef0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  haveResources: 1
   teamInControl: 2147483647
   neighbors: []
 --- !u!1 &7278020662392421098
