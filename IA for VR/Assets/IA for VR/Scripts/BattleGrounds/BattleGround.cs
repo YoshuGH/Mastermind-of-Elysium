@@ -16,7 +16,7 @@ public class BattleGround : MonoBehaviour
     
     private void Awake() {
         battleGroundTransform = this.transform;
-        nodeQty = GenerateRandomNodeQty(3);
+        nodeQty = GenerateRandomNodeQty(0);
         nodes = new List<Node>();
         InitBattlegroundGraph();
     }
@@ -53,6 +53,7 @@ public class BattleGround : MonoBehaviour
         for(int i = 0; i < nodeQty; i++){
             if(i == 0){ //Primer nodo
                 tempNode = Instantiate(ChooseTypeOfPlanet(), spawnNodePoint, Quaternion.identity, battleGroundTransform).GetComponent<Node>();
+                tempNode.teamInControl = 1;
                 nodes.Add(tempNode); 
             }
 
@@ -72,7 +73,6 @@ public class BattleGround : MonoBehaviour
                     }while(!canSpawn);
                     
                     tempNode = Instantiate(ChooseTypeOfPlanet(), spawnNodePoint, Quaternion.identity, battleGroundTransform).GetComponent<Node>();
-
                     nodes.Add(tempNode);
                     currentNodes = nodes.Count;
                     nodes[i].AddNeighbor(nodes[currentNodes - 1]);
@@ -135,10 +135,15 @@ public class BattleGround : MonoBehaviour
     }
 
     private void OnDrawGizmos(){
-        foreach(Node node in nodes){
-            foreach(Node subNode in node.Neighbors){
-                Gizmos.color = Color.blue;
-                Gizmos.DrawLine(node.transform.position, subNode.transform.position);
+        if(nodes != null)
+        {
+            foreach (Node node in nodes)
+            {
+                foreach (Node subNode in node.Neighbors)
+                {
+                    Gizmos.color = Color.blue;
+                    Gizmos.DrawLine(node.transform.position, subNode.transform.position);
+                }
             }
         }
     }

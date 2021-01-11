@@ -10,9 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 167711553727036200}
   - component: {fileID: 5090937885749100164}
+  - component: {fileID: 5141724556393919275}
   m_Layer: 9
   m_Name: MineralPlanet
-  m_TagString: Untagged
+  m_TagString: Nodes
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -52,6 +53,24 @@ MonoBehaviour:
   haveResources: 1
   teamInControl: 2147483647
   neighbors: []
+--- !u!114 &5141724556393919275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 971940795385444808}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 0.9843137, b: 0, a: 1}
+  outlineWidth: 6
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &7278020662392421098
 GameObject:
   m_ObjectHideFlags: 0
@@ -305,7 +324,7 @@ PrefabInstance:
     - target: {fileID: 3520529855248740816, guid: 8c3f72f849c0cb8418645a189798611e,
         type: 3}
       propertyPath: m_Name
-      value: w
+      value: Minerals (4)
       objectReference: {fileID: 0}
     - target: {fileID: 4976295827872762116, guid: 8c3f72f849c0cb8418645a189798611e,
         type: 3}
