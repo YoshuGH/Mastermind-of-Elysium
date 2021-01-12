@@ -13,14 +13,15 @@ public class InputManager : MonoBehaviour
     [Header("Managers References")]
     [SerializeField] private GameManager gm;
     [SerializeField] private SpawnManager spawn;
+
+    [Header("Other")]
+    [SerializeField] private Color selectingOutlineColor = Color.magenta;
+
     private GameObject selecField;
     private List<Node> nodesNearbySelectedNode;
-    private int idleSelectedNodeIndex = 0;
-    private Node idleSelectedNode;
+    private int idleSelectedNodeIndex = 0, selectingNodeSelectedNodeIndex = 0;
+    private Node idleSelectedNode, selectingNodeSelectedNode;
     private bool selectingNode = false, clickOnce = false, idle = true;
-
-    // Accesores
-    //public bool Idle { get { return idle; } set { idle = value; } }
 
     // Start is called before the first frame update
     void Start()
@@ -45,11 +46,11 @@ public class InputManager : MonoBehaviour
             {
                 if (gm.PlayerNodes.Count >= 1 && (idleSelectedNodeIndex + 1) < gm.PlayerNodes.Count)
                 {
-                    ChangeSelectedNode(gm.PlayerNodes[idleSelectedNodeIndex + 1]);
+                    ChangeSelectedNode(gm.PlayerNodes[idleSelectedNodeIndex + 1], 0);
                 }
                 else if(gm.PlayerNodes.Count >= 1 && (idleSelectedNodeIndex + 1) >= gm.PlayerNodes.Count)
                 {
-                    ChangeSelectedNode(gm.PlayerNodes[0]);
+                    ChangeSelectedNode(gm.PlayerNodes[0], 0);
                 }
             }
 
@@ -57,14 +58,13 @@ public class InputManager : MonoBehaviour
             // sobre la lista de nodos que el player posee
             if (Input.GetKeyDown("left"))
             {
-                print(idleSelectedNodeIndex);
                 if (gm.PlayerNodes.Count >= 1 && (idleSelectedNodeIndex - 1) >= 0)
                 {
-                    ChangeSelectedNode(gm.PlayerNodes[idleSelectedNodeIndex - 1]);
+                    ChangeSelectedNode(gm.PlayerNodes[idleSelectedNodeIndex - 1], 0);
                 }
                 else if (gm.PlayerNodes.Count >= 1 && (idleSelectedNodeIndex - 1) < 0)
                 {
-                    ChangeSelectedNode(gm.PlayerNodes[gm.PlayerNodes.Count -1]);
+                    ChangeSelectedNode(gm.PlayerNodes[gm.PlayerNodes.Count -1], 0);
                 }
             }
 
@@ -86,6 +86,15 @@ public class InputManager : MonoBehaviour
                         nodesNearbySelectedNode.Add(colliderNodes.GetComponentInParent<Node>());
                     }
                 }
+
+                idleSelectedNode.GetComponentInParent<Outline>().OutlineColor = selectingOutlineColor;
+
+                if (nodesNearbySelectedNode.Count > 0)
+                {
+                    selectingNodeSelectedNode = nodesNearbySelectedNode[0];
+                    selectingNodeSelectedNode.GetComponentInParent<Outline>().enabled = true;
+                }
+                else { Debug.LogWarning("No nodes reachable"); }
             }
         }
         #endregion
@@ -94,39 +103,64 @@ public class InputManager : MonoBehaviour
         #region Selecting Node State
         else if (selectingNode)
         {
-            //Si vuelve a presionar espacio estando en seleccion, este cancela la seleccion
-            if(Input.GetKeyDown("space"))
+            // Al presionar la flecha itera hacia la derecha (es decir suma 1 al iterador),
+            // sobre la lista de nodos que haya detectado a su alrededor
+            if (Input.GetKeyDown("right"))
+            {
+                if (nodesNearbySelectedNode.Count >= 1 && (selectingNodeSelectedNodeIndex + 1) < nodesNearbySelectedNode.Count)
+                {
+                    ChangeSelectedNode(nodesNearbySelectedNode[selectingNodeSelectedNodeIndex + 1], 1);
+                }
+                else if (nodesNearbySelectedNode.Count >= 1 && (selectingNodeSelectedNodeIndex + 1) >= nodesNearbySelectedNode.Count)
+                {
+                    ChangeSelectedNode(nodesNearbySelectedNode[0], 1);
+                }
+            }
+
+            // Al presionar la flecha itera hacia la izquierda (es decir resta 1 al iterador),
+            // sobre la lista de nodos que haya detectado a su alrededor
+            if (Input.GetKeyDown("left"))
+            {
+
+                if (nodesNearbySelectedNode.Count >= 1 && (selectingNodeSelectedNodeIndex - 1) >= 0)
+                {
+                    ChangeSelectedNode(nodesNearbySelectedNode[selectingNodeSelectedNodeIndex - 1], 1);
+                }
+                else if (nodesNearbySelectedNode.Count >= 1 && (selectingNodeSelectedNodeIndex - 1) < 0)
+                {
+                    ChangeSelectedNode(nodesNearbySelectedNode[nodesNearbySelectedNode.Count - 1], 1);
+                }
+            }
+
+            if(Input.GetKeyDown("enter"))
+            {
+                // Al seleccionar ese nodo se ejecuta el codigo
+
+                // Cancelar la seleccion
+                idle = true;
+                selectingNode = false;
+                selectingNodeSelectedNode.GetComponentInParent<Outline>().enabled = false;
+                idleSelectedNode.GetComponentInParent<Outline>().OutlineColor = Color.yellow;
+                Destroy(selecField);
+                selecField = null;
+                nodesNearbySelectedNode.Clear();
+                selectingNodeSelectedNode = null;
+            }
+
+            // Si vuelve a presionar espacio estando en seleccion, este cancela la seleccion
+            if (Input.GetKeyDown("space"))
             {
                 idle = true;
                 selectingNode = false;
+                selectingNodeSelectedNode.GetComponentInParent<Outline>().enabled = false;
+                idleSelectedNode.GetComponentInParent<Outline>().OutlineColor = Color.yellow;
                 Destroy(selecField);
+                selecField = null;
                 nodesNearbySelectedNode.Clear();
+                selectingNodeSelectedNode = null;
             }
         }
         #endregion
-
-        /*
-        if (selectingNode && Input.GetKeyDown("1"))
-        {
-            spawn.planets.Add(this.transform);
-            spawn.planets.Add(testPlanet);
-
-            for (int i = 0; i < spawn.ships.Count; i++)
-            {
-                spawn.ships[i].GetComponent<ShipsBehavior>().puntos = spawn.planets;
-            }
-
-            clickOnce = false;
-            selectingNode = false;
-
-            if (selecField != null)
-            {
-                Destroy(selecField);
-            }
-
-            spawn.ships.Clear();
-            //spawn.planets.Clear();
-        }*/
     }
 
     // Funcion que activa el Outline.cs del el primer y unico nodo al momento de iniciar el juego
@@ -137,11 +171,28 @@ public class InputManager : MonoBehaviour
     }
 
     // Funcion para cambiar de nodo
-    void ChangeSelectedNode( Node _nextNode)
+    // States number:
+    //   0: idle
+    //   1: selecting node
+    void ChangeSelectedNode( Node _nextNode, int _state)
     {
-        idleSelectedNode.GetComponentInParent<Outline>().enabled = false;
-        idleSelectedNode = _nextNode;
-        idleSelectedNodeIndex = gm.PlayerNodes.IndexOf(_nextNode);
-        idleSelectedNode.GetComponentInParent<Outline>().enabled = true;
+        switch(_state)
+        {
+            case 0:
+                idleSelectedNode.GetComponentInParent<Outline>().enabled = false;
+                idleSelectedNode = _nextNode;
+                idleSelectedNodeIndex = gm.PlayerNodes.IndexOf(_nextNode);
+                idleSelectedNode.GetComponentInParent<Outline>().enabled = true;
+                break;
+            case 1:
+                selectingNodeSelectedNode.GetComponentInParent<Outline>().enabled = false;
+                selectingNodeSelectedNode = _nextNode;
+                selectingNodeSelectedNodeIndex = nodesNearbySelectedNode.IndexOf(_nextNode);
+                selectingNodeSelectedNode.GetComponentInParent<Outline>().enabled = true;
+                break;
+            default:
+                Debug.LogError("State non existing");
+                break;
+        }
     }
 }
