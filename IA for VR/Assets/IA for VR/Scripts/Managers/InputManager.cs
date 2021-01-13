@@ -12,7 +12,6 @@ public class InputManager : MonoBehaviour
     //Variables Privadas
     [Header("Managers References")]
     [SerializeField] private GameManager gm;
-    [SerializeField] private SpawnManager spawn;
 
     [Header("Other")]
     [SerializeField] private Color selectingOutlineColor = Color.magenta;
@@ -21,7 +20,7 @@ public class InputManager : MonoBehaviour
     private List<Node> nodesNearbySelectedNode;
     private int idleSelectedNodeIndex = 0, selectingNodeSelectedNodeIndex = 0;
     private Node idleSelectedNode, selectingNodeSelectedNode;
-    private bool selectingNode = false, clickOnce = false, idle = true;
+    private bool selectingNode = false, idle = true;
 
     // Start is called before the first frame update
     void Start()
@@ -76,7 +75,12 @@ public class InputManager : MonoBehaviour
                 selecField = Instantiate(selectionField, idleSelectedNode.GetComponentInParent<Transform>().localPosition, idleSelectedNode.GetComponentInParent<Transform>().localRotation);
                 selecField.transform.localScale = new Vector3(selectionFieldScale, selectionFieldScale, selectionFieldScale);
 
-                Collider[] colliderTempNodes = Physics.OverlapSphere(idleSelectedNode.GetComponentInParent<Transform>().localPosition,
+                idleSelectedNode.GetComponentInParent<Outline>().OutlineColor = selectingOutlineColor;
+
+                selectingNodeSelectedNode = idleSelectedNode.Neighbors[0];
+                selectingNodeSelectedNode.GetComponentInParent<Outline>().enabled = true;
+
+                /*Collider[] colliderTempNodes = Physics.OverlapSphere(idleSelectedNode.GetComponentInParent<Transform>().localPosition,
                     selectionFieldScale/2, LayerMask.GetMask("Nodes"));
 
                 foreach(Collider colliderNodes in colliderTempNodes)
@@ -94,7 +98,7 @@ public class InputManager : MonoBehaviour
                     selectingNodeSelectedNode = nodesNearbySelectedNode[0];
                     selectingNodeSelectedNode.GetComponentInParent<Outline>().enabled = true;
                 }
-                else { Debug.LogWarning("No nodes reachable"); }
+                else { Debug.LogWarning("No nodes reachable"); }*/
             }
         }
         #endregion
@@ -106,14 +110,16 @@ public class InputManager : MonoBehaviour
             // Al presionar la flecha itera hacia la derecha (es decir suma 1 al iterador),
             // sobre la lista de nodos que haya detectado a su alrededor
             if (Input.GetKeyDown("right"))
-            {
-                if (nodesNearbySelectedNode.Count >= 1 && (selectingNodeSelectedNodeIndex + 1) < nodesNearbySelectedNode.Count)
+            {          
+
+                if ( idleSelectedNode.Neighbors.Count >= 1 && (selectingNodeSelectedNodeIndex + 1) < idleSelectedNode.Neighbors.Count 
+                    )
                 {
-                    ChangeSelectedNode(nodesNearbySelectedNode[selectingNodeSelectedNodeIndex + 1], 1);
+                    ChangeSelectedNode(idleSelectedNode.Neighbors[selectingNodeSelectedNodeIndex + 1], 1);
                 }
-                else if (nodesNearbySelectedNode.Count >= 1 && (selectingNodeSelectedNodeIndex + 1) >= nodesNearbySelectedNode.Count)
+                else if (idleSelectedNode.Neighbors.Count >= 1 && (selectingNodeSelectedNodeIndex + 1) >= idleSelectedNode.Neighbors.Count)
                 {
-                    ChangeSelectedNode(nodesNearbySelectedNode[0], 1);
+                    ChangeSelectedNode(idleSelectedNode.Neighbors[0], 1);
                 }
             }
 
@@ -122,19 +128,24 @@ public class InputManager : MonoBehaviour
             if (Input.GetKeyDown("left"))
             {
 
-                if (nodesNearbySelectedNode.Count >= 1 && (selectingNodeSelectedNodeIndex - 1) >= 0)
+                if (idleSelectedNode.Neighbors.Count >= 1 && (selectingNodeSelectedNodeIndex - 1) >= 0)
                 {
-                    ChangeSelectedNode(nodesNearbySelectedNode[selectingNodeSelectedNodeIndex - 1], 1);
+                    ChangeSelectedNode(idleSelectedNode.Neighbors[selectingNodeSelectedNodeIndex - 1], 1);
                 }
-                else if (nodesNearbySelectedNode.Count >= 1 && (selectingNodeSelectedNodeIndex - 1) < 0)
+                else if (idleSelectedNode.Neighbors.Count >= 1 && (selectingNodeSelectedNodeIndex - 1) < 0)
                 {
-                    ChangeSelectedNode(nodesNearbySelectedNode[nodesNearbySelectedNode.Count - 1], 1);
+                    ChangeSelectedNode(idleSelectedNode.Neighbors[idleSelectedNode.Neighbors.Count - 1], 1);
                 }
             }
 
             if(Input.GetKeyDown("enter"))
             {
                 // Al seleccionar ese nodo se ejecuta el codigo
+                if(selectingNodeSelectedNode.teamInControl != 1)
+                {
+                    selectingNodeSelectedNode.teamInControl = 1;
+                    gm.AddPlayerNode(selectingNodeSelectedNode);
+                }
 
                 // Cancelar la seleccion
                 idle = true;
@@ -144,6 +155,13 @@ public class InputManager : MonoBehaviour
                 Destroy(selecField);
                 selecField = null;
                 nodesNearbySelectedNode.Clear();
+                
+
+                idleSelectedNode.GetComponentInParent<Outline>().enabled = false;
+                idleSelectedNode = selectingNodeSelectedNode;
+                idleSelectedNodeIndex = gm.PlayerNodes.IndexOf(selectingNodeSelectedNode);
+                idleSelectedNode.GetComponentInParent<Outline>().enabled = true;
+
                 selectingNodeSelectedNode = null;
             }
 
@@ -187,7 +205,7 @@ public class InputManager : MonoBehaviour
             case 1:
                 selectingNodeSelectedNode.GetComponentInParent<Outline>().enabled = false;
                 selectingNodeSelectedNode = _nextNode;
-                selectingNodeSelectedNodeIndex = nodesNearbySelectedNode.IndexOf(_nextNode);
+                selectingNodeSelectedNodeIndex = idleSelectedNode.Neighbors.IndexOf(_nextNode);
                 selectingNodeSelectedNode.GetComponentInParent<Outline>().enabled = true;
                 break;
             default:

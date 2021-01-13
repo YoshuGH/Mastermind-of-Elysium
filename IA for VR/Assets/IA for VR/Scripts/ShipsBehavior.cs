@@ -13,22 +13,25 @@ public class ShipsBehavior : MonoBehaviour
     private float factorT; //Factor de moviento
     private bool oneTime = false, lastPoint = false;
 
+    private List<Transform> puntos;
+
 
     public float speed = 2f;
-    public List<Transform> puntos;
-    public SpawnManager spawn;
+
+    //Accesores
+    public List<Transform> Puntos { get { return puntos; } }
+    
 
     // Start is called before the first frame update
     void Start()
     {
         puntos = new List<Transform>();
-        
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(puntos.Count > 0)
+        if(puntos.Count > 1)
         {
             if(!oneTime)
             {

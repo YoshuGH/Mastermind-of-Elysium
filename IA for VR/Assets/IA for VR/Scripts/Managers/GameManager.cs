@@ -45,28 +45,41 @@ public class GameManager : MonoBehaviour
             Node tempNode = playerNodesModels[i].GetComponent<Node>();
             if (tempNode.teamInControl == 1)
             {
-                AddPlayerNode(playerNodesModels[i]);
+                AddPlayerNode(tempNode);
             }
         }
     }
 
-    void AddPlayerNode(GameObject modelNode)
+    public void AddPlayerNode(Node node)
     {
-        Node tempNode = modelNode.GetComponent<Node>();
+        
 
-        if (modelNode.GetComponent<Renderer>() != null)
+        if (node.GetComponent<Renderer>() != null)
         {
-            playerNodes.Add(tempNode);
-            Renderer rend = modelNode.GetComponent<Renderer>();
+            playerNodes.Add(node);
+            Renderer rend = node.GetComponent<Renderer>();
             rend.material = playerMat;
         }
-        else if(tempNode.HaveResources)
+        else if(node.HaveResources)
         {
-            playerNodes.Add(tempNode);
-            Renderer rend = modelNode.transform.GetChild(0).GetComponent<Renderer>();
+            playerNodes.Add(node);
+            Renderer rend = node.transform.GetChild(0).GetComponent<Renderer>();
             rend.material = playerMat;
         }
         
     }
 
+    public void FightForNode(Node _firstNode, Node _secondNode)
+    {
+        if(_firstNode.OrbitShips.Count > _secondNode.OrbitShips.Count)
+        {
+            // Mandar las naves al nodo
+            foreach(GameObject ship in _firstNode.OrbitShips)
+            {
+                // Solo se agregan los nodos y la nave se mueve sola
+                ship.GetComponent<ShipsBehavior>().Puntos.Add(_firstNode.transform.Find("SpawnPoint"));
+                ship.GetComponent<ShipsBehavior>().Puntos.Add(_secondNode.transform.Find("SpawnPoint"));
+            }
+        }
+    }
 }

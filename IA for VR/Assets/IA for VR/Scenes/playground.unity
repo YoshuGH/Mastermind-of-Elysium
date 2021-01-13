@@ -415,6 +415,7 @@ MonoBehaviour:
   playerShipsPref: {fileID: 1648075946743565818, guid: 55d8b63052a9c0b409bc745ada0b42a1,
     type: 3}
   initQuantityShips: 5
+  gm: {fileID: 1827076793}
 --- !u!4 &1217960774
 Transform:
   m_ObjectHideFlags: 0
@@ -523,3 +524,72 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &123052547927308564
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2747550209227601549, guid: c61685195324ae74da2bfe789484ac72,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2747550209227601549, guid: c61685195324ae74da2bfe789484ac72,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.37737834
+      objectReference: {fileID: 0}
+    - target: {fileID: 2747550209227601549, guid: c61685195324ae74da2bfe789484ac72,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.6323261
+      objectReference: {fileID: 0}
+    - target: {fileID: 2747550209227601549, guid: c61685195324ae74da2bfe789484ac72,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.0168333
+      objectReference: {fileID: 0}
+    - target: {fileID: 2747550209227601549, guid: c61685195324ae74da2bfe789484ac72,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2747550209227601549, guid: c61685195324ae74da2bfe789484ac72,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2747550209227601549, guid: c61685195324ae74da2bfe789484ac72,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2747550209227601549, guid: c61685195324ae74da2bfe789484ac72,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2747550209227601549, guid: c61685195324ae74da2bfe789484ac72,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2747550209227601549, guid: c61685195324ae74da2bfe789484ac72,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2747550209227601549, guid: c61685195324ae74da2bfe789484ac72,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6258944645048020468, guid: c61685195324ae74da2bfe789484ac72,
+        type: 3}
+      propertyPath: m_Name
+      value: Planet Agent
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c61685195324ae74da2bfe789484ac72, type: 3}

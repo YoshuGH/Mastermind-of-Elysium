@@ -13,6 +13,9 @@ public class BattleGround : MonoBehaviour
     [SerializeField]private float minDistanceBetweenNodes, maxDistanceBetweenNodes;
 
     public float bgWidth, bgLength, bgHeight;
+
+    //Accesores
+    public List<Node> Nodes { get { return nodes; } }
     
     private void Awake() {
         battleGroundTransform = this.transform;

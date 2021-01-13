@@ -6,6 +6,14 @@ using Unity.MLAgents;
 
 public class PlanetAgent : Agent
 {
+    /*
+     *   Observaciones:
+     *   - Nodos totales
+     *   - Nodos en posesion
+     *   - Nodos Vecinos
+     *   - Nodo Actual
+     *   (- Nodo a dirigir)
+     * */
 
     public override void Initialize()
     {

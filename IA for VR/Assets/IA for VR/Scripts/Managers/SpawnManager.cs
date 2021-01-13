@@ -5,19 +5,22 @@ using UnityEngine;
 public class SpawnManager : MonoBehaviour
 {
     // Variables Publicas
+    [Header("Prefabs")]
     public GameObject neutralShipsPref;
     public GameObject playerShipsPref;
     public int initQuantityShips;
-    
 
-    //public List<GameObject> ships;
+    //Variables Privadas
+    [Header("Managers")]
+    [SerializeField] private GameManager gm;
+    
 
     // Start is called before the first frame update
     void Start()
     {
         //ships = new List<GameObject>();
         Invoke("InitSpawnNeutralShips", 0.11f);
-        //InvokeRepeating("Spawn", 1f, 5f);
+        InvokeRepeating("SpawnPlayerShips", 1f, 5f);
     }
 
     // Update is called once per frame
@@ -50,26 +53,14 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
-    //  Type ships
-    //    0: Neutral
-    //    1: Player
-   /* GameObject InstantiateShips( Transform _transform, int _quantity, int _type )
+    void SpawnPlayerShips()
     {
         GameObject ship;
-        for (int i = 0; i<_quantity; i++)
-        {
-            switch (_type)
-            {
-                case 0:
-                    ship = Instantiate(neutralShipsPref, _transform.position, _transform.rotation);
-                    break;
-                case 1:
-                    ship = Instantiate(playerShipsPref, _transform.position, _transform.rotation);
-                    break;
-            }
-        }
-        return ship;
-    }*/
+        Transform spawnpointTransform = gm.PlayerNodes[0].transform.Find("SpawnPoint");
+        ship = Instantiate(playerShipsPref, spawnpointTransform.position, spawnpointTransform.rotation);
+        ship.transform.SetParent(spawnpointTransform);
+        gm.PlayerNodes[0].OrbitShips.Add(ship);
+    }
 
     
 }
