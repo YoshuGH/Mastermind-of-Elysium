@@ -7,7 +7,7 @@ public class Node :  MonoBehaviour
 {
     [SerializeField]private bool haveResources;
     public bool HaveResources { get { return haveResources; } }
-    public int teamInControl = int.MaxValue;
+    public int teamInControl;
     [SerializeField]private List<Node> neighbors;
     [SerializeField] private List<GameObject> orbitShips;
     public List<GameObject> OrbitShips { get { return orbitShips; } }

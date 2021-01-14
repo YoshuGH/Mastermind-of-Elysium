@@ -11,15 +11,21 @@ public class GameManager : MonoBehaviour
     // Variables Privadas
     [Header("Lista de jugadores")]
     [SerializeField] private List<Player> players;
+    [SerializeField]private BattleGround battleGround;
 
     //Accesores
     public List<Player> Players { get { return players; } }
 
+
+    private void Awake() {
+        
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        // Buscar los nodos del personaje
-        Invoke("FindPlayerNodes", 0.1f);
+        // Asigna los planetas iniciales a cada team
+        Invoke("RandomSpawnTeams", 0.1f);
     }
 
     // Update is called once per frame
@@ -28,36 +34,19 @@ public class GameManager : MonoBehaviour
         
     }
 
-    void FindPlayerNodes(Player player)
-    {
-        GameObject[] playerNodesModels;
-        playerNodesModels = GameObject.FindGameObjectsWithTag("Nodes");
+    void RandomSpawnTeams(){
+        for(int i = 0; i < players.Count; i++){
+            int randomPlanetIndex;
 
-        for (int i = 0; i < playerNodesModels.Length; i++)
-        {
-            Node tempNode = playerNodesModels[i].GetComponent<Node>();
-            if (tempNode.teamInControl == player.TeamId)
-            {
-                AddPlayerNode(tempNode, player);
-            }
+            //Esta libre
+            do {
+               randomPlanetIndex = Random.Range(0, battleGround.NodeQty - 1);
+            } while(battleGround.Nodes[randomPlanetIndex].teamInControl != 0);
+            
+            //Asignalo entonces
+            battleGround.Nodes[randomPlanetIndex].teamInControl = players[i].TeamId;
+            players[i].AddPlayerNode(battleGround.Nodes[randomPlanetIndex]);
         }
-    }
-
-    public void AddPlayerNode(Node node, Player player)
-    {
-        if (node.GetComponent<Renderer>() != null)
-        {
-            player.AddPlayerNode(node);
-            Renderer rend = node.GetComponent<Renderer>();
-            rend.material = player.material;
-        }
-        else if(node.HaveResources)
-        {
-            player.AddPlayerNode(node);
-            Renderer rend = node.transform.GetChild(0).GetComponent<Renderer>();
-            rend.material = player.material;
-        }
-        
     }
 
     public void FightForNode(Node _firstNode, Node _secondNode)

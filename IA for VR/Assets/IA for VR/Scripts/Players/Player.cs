@@ -20,7 +20,20 @@ public class Player : MonoBehaviour
 
     public void UpdateMaxShipQty() => maxShipsQty  = playerNodes.Count * maxQtyPerNode;
 
-    public void AddPlayerNode (Node node) => playerNodes.Add(node);
+    public void AddPlayerNode (Node node) {
+         if (node.GetComponent<Renderer>() != null)
+        {
+            playerNodes.Add(node);
+            Renderer rend = node.GetComponent<Renderer>();
+            rend.material = material;
+        }
+        else if(node.HaveResources)
+        {
+            playerNodes.Add(node);
+            Renderer rend = node.transform.GetChild(0).GetComponent<Renderer>();
+            rend.material = material;
+        }
+    }
     public List<Node> PlayerNodes { get { return playerNodes; } }
     public void RemoveNode(Node node) => playerNodes.Remove(node);
 
@@ -41,7 +54,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         // Activar el outline de seleccion del nodo, como al principio solo hay un nodo, se activa ese nada mas
-        Invoke("OutlineAtStart", 0.11f);
+        Invoke("OutlineAtStart", 0.15f);
     }
 
     #region Input Manager
@@ -100,6 +113,12 @@ public class Player : MonoBehaviour
         else if (_listToIterate.Count >= 1 && (_iterator - 1) < 0)
         {
             ChangeSelectedNode(_listToIterate[_listToIterate.Count - 1], _state);
+        }
+    }
+
+    private void MoveTo(int _iterator, List<Node> _listToIterate, int _state){
+        if(_iterator < _listToIterate.Count && _iterator >= 0){
+                ChangeSelectedNode(_listToIterate[_iterator], _state);
         }
     }
 

@@ -9,6 +9,7 @@ public class BattleGround : MonoBehaviour
     [SerializeField]private float ResourcesRatio;
     private Transform battleGroundTransform;
     private int nodeQty;
+    public int NodeQty { get {return nodeQty; }}
     private List<Node> nodes;
     [SerializeField]private float minDistanceBetweenNodes, maxDistanceBetweenNodes;
 
@@ -56,7 +57,7 @@ public class BattleGround : MonoBehaviour
         for(int i = 0; i < nodeQty; i++){
             if(i == 0){ //Primer nodo
                 tempNode = Instantiate(ChooseTypeOfPlanet(), spawnNodePoint, Quaternion.identity, battleGroundTransform).GetComponent<Node>();
-                tempNode.teamInControl = 1;
+                //tempNode.teamInControl = 1;
                 nodes.Add(tempNode); 
             }
 

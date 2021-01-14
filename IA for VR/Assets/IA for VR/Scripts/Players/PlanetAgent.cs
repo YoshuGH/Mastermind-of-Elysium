@@ -12,14 +12,20 @@ public class PlanetAgent : Agent
             Estado del objetivo
      * */
     [SerializeField]private BattleGround battleGround;
+    private Player player;
     public bool isNodeFree;
     public List<Node> nodesInControl;
+    private bool state;
     public List<Node> nodeWaypoints;
     public Node targetNode, currentNode;
 
+    private void Start() {
+        player = GetComponent<Player>();   
+    }
+
     public override void OnEpisodeBegin()
     {
-        nodesInControl = null;//Agregar el accesor
+        nodesInControl = player.PlayerNodes;
         currentNode = nodesInControl[0];
         nodeWaypoints = currentNode.Neighbors;
     }
@@ -37,12 +43,19 @@ public class PlanetAgent : Agent
     {
         Node prevCurrentNode = currentNode;
         Node prevTargetNode = targetNode;
+        int prevNodesQty = nodesInControl.Count;
 
         currentNode = nodesInControl[(int)vectorAction[0]];
         targetNode = nodeWaypoints[(int)vectorAction[1]];
 
+        //Cambio de nodo?
+        if(isTheSameNode(currentNode, prevCurrentNode)){
 
-        
+        }
+        //Cambio de destino?
+        if(isTheSameNode(targetNode, prevTargetNode))
+
+        /// ----- Rewards ---- ///
 
         //Si pierde un nodo(futuro)
 
@@ -52,11 +65,15 @@ public class PlanetAgent : Agent
             AddReward(-0.001f);
         }
 
+        //Conquisto algo mi pana
+        if(nodesInControl.Count > prevNodesQty){
+            AddReward((nodesInControl.Count - prevNodesQty) * 0.01f);
+        }
+
+        
+
 
     }
-
-
-
 
     private bool isTheSameNode(Node node1, Node node2){
         if(node1 == node2){

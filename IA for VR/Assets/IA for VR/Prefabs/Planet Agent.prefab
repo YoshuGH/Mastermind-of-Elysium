@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1766348175143521959}
   - component: {fileID: 2668794290634786742}
   - component: {fileID: 8449751398335055833}
+  - component: {fileID: 7361287736927386810}
   m_Layer: 0
   m_Name: Planet Agent
   m_TagString: Untagged
@@ -49,6 +50,12 @@ MonoBehaviour:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
+  battleGround: {fileID: 0}
+  isNodeFree: 0
+  nodesInControl: []
+  nodeWaypoints: []
+  targetNode: {fileID: 0}
+  currentNode: {fileID: 0}
 --- !u!114 &2668794290634786742
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -87,3 +94,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DecisionPeriod: 5
   TakeActionsBetweenDecisions: 1
+--- !u!114 &7361287736927386810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6258944645048020468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bf116d487aeb5741bb566c5666e1682, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerNodes: []
+  material: {fileID: 2100000, guid: 991f40ae0e8b1d7479a35111ab311924, type: 2}
+  teamId: 2
+  maxQtyPerNode: 0
+  selectingOutlineColor: {r: 1, g: 0, b: 1, a: 1}
