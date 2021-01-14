@@ -474,7 +474,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 917cf6b8f18e0ef41b8f83f0facb1eef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerNodes: []
+  playerNodes:
+  - {fileID: 0}
+  - {fileID: 0}
   playerMat: {fileID: 2100000, guid: 26aed9c2b1992fa4ea99b360d9a4c892, type: 2}
 --- !u!1 &1862715007
 GameObject:
@@ -550,7 +552,12 @@ PrefabInstance:
     - target: {fileID: 2668794290634786742, guid: c61685195324ae74da2bfe789484ac72,
         type: 3}
       propertyPath: m_BrainParameters.VectorObservationSize
-      value: 4
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2668794290634786742, guid: c61685195324ae74da2bfe789484ac72,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorActionSize.Array.data[0]
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2747550209227601549, guid: c61685195324ae74da2bfe789484ac72,
         type: 3}
