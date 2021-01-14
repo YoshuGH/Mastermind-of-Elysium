@@ -80,25 +80,7 @@ public class InputManager : MonoBehaviour
                 selectingNodeSelectedNode = idleSelectedNode.Neighbors[0];
                 selectingNodeSelectedNode.GetComponentInParent<Outline>().enabled = true;
 
-                /*Collider[] colliderTempNodes = Physics.OverlapSphere(idleSelectedNode.GetComponentInParent<Transform>().localPosition,
-                    selectionFieldScale/2, LayerMask.GetMask("Nodes"));
-
-                foreach(Collider colliderNodes in colliderTempNodes)
-                {
-                    if(colliderNodes.GetComponentInParent<Node>() != idleSelectedNode)
-                    {
-                        nodesNearbySelectedNode.Add(colliderNodes.GetComponentInParent<Node>());
-                    }
-                }
-
-                idleSelectedNode.GetComponentInParent<Outline>().OutlineColor = selectingOutlineColor;
-
-                if (nodesNearbySelectedNode.Count > 0)
-                {
-                    selectingNodeSelectedNode = nodesNearbySelectedNode[0];
-                    selectingNodeSelectedNode.GetComponentInParent<Outline>().enabled = true;
-                }
-                else { Debug.LogWarning("No nodes reachable"); }*/
+                
             }
         }
         #endregion
