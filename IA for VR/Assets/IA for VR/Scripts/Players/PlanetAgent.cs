@@ -41,6 +41,7 @@ public class PlanetAgent : Agent
         currentNode = nodesInControl[(int)vectorAction[0]];
         targetNode = nodeWaypoints[(int)vectorAction[1]];
 
+
         
 
         //Si pierde un nodo(futuro)
@@ -50,6 +51,8 @@ public class PlanetAgent : Agent
         if(isTheSameNode(prevCurrentNode, currentNode) &&  isTheSameNode(prevTargetNode, targetNode)){
             AddReward(-0.001f);
         }
+
+
     }
 
 

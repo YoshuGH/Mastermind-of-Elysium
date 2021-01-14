@@ -9,22 +9,15 @@ public class GameManager : MonoBehaviour
     //  1: Player Team
 
     // Variables Privadas
-    [Header("Debug")]
-    [SerializeField] private List<Node> playerNodes;
+    [Header("Lista de jugadores")]
+    [SerializeField] private List<Player> players;
 
-    // Variables Publicas
-    [Header("Materials")]
-    public Material playerMat;
 
-    // Accesores
-    public List<Node> PlayerNodes { get { return playerNodes; } }
+
 
     // Start is called before the first frame update
     void Start()
     {
-        // Inicializacion de Listas
-        playerNodes = new List<Node>();
-
         // Buscar los nodos del personaje
         Invoke("FindPlayerNodes", 0.1f);
     }
@@ -35,7 +28,7 @@ public class GameManager : MonoBehaviour
         
     }
 
-    void FindPlayerNodes()
+    void FindPlayerNodes(Player player)
     {
         GameObject[] playerNodesModels;
         playerNodesModels = GameObject.FindGameObjectsWithTag("Nodes");
@@ -43,28 +36,28 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < playerNodesModels.Length; i++)
         {
             Node tempNode = playerNodesModels[i].GetComponent<Node>();
-            if (tempNode.teamInControl == 1)
+            if (tempNode.teamInControl == player.TeamId)
             {
-                AddPlayerNode(tempNode);
+                AddPlayerNode(tempNode, player);
             }
         }
     }
 
-    public void AddPlayerNode(Node node)
+    public void AddPlayerNode(Node node, Player player)
     {
         
 
         if (node.GetComponent<Renderer>() != null)
         {
-            playerNodes.Add(node);
+            player.AddPlayerNode(node);
             Renderer rend = node.GetComponent<Renderer>();
-            rend.material = playerMat;
+            rend.material = player.material;
         }
         else if(node.HaveResources)
         {
-            playerNodes.Add(node);
+            player.AddPlayerNode(node);
             Renderer rend = node.transform.GetChild(0).GetComponent<Renderer>();
-            rend.material = playerMat;
+            rend.material = player.material;
         }
         
     }

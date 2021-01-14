@@ -19,7 +19,7 @@ public class BattleGround : MonoBehaviour
     
     private void Awake() {
         battleGroundTransform = this.transform;
-        nodeQty = GenerateRandomNodeQty(0);
+        nodeQty = GenerateRandomNodeQty(2);
         nodes = new List<Node>();
         InitBattlegroundGraph();
     }
