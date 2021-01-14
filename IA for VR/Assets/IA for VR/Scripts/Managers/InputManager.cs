@@ -17,7 +17,7 @@ public class InputManager : MonoBehaviour
     [SerializeField] private Color selectingOutlineColor = Color.magenta;
 
     private GameObject selecField;
-    private List<Node> nodesNearbySelectedNode;
+    //private List<Node> nodesNearbySelectedNode;
     private int idleSelectedNodeIndex = 0, selectingNodeSelectedNodeIndex = 0;
     private Node idleSelectedNode, selectingNodeSelectedNode;
     private bool selectingNode = false, idle = true;
@@ -28,12 +28,10 @@ public class InputManager : MonoBehaviour
     public int Idle_SelectedNodeIndex { set { selectingNodeSelectedNodeIndex = value; } get { return selectingNodeSelectedNodeIndex; } }
     public int Selecting_SelectedNodeIndex { set { selectingNodeSelectedNodeIndex = value; } get { return selectingNodeSelectedNodeIndex; } }
 
+    /*
     // Start is called before the first frame update
     void Start()
     {
-        // Inicializacion de listas
-        nodesNearbySelectedNode = new List<Node>();
-
         // Activar el outline de seleccion del nodo, como al principio solo hay un nodo, se activa ese nada mas
         Invoke("OutlineAtStart", 0.11f);
     }
@@ -136,8 +134,8 @@ public class InputManager : MonoBehaviour
             }
         }
         #endregion
-    }
-
+    }*/
+    /*
     public void MoveRight(int _iterator, List<Node> _listToIterate, int _state)
     {
         if (_listToIterate.Count >= 1 && (_iterator + 1) < _listToIterate.Count)
@@ -213,4 +211,5 @@ public class InputManager : MonoBehaviour
 
         selectingNodeSelectedNode = null;
     }
+    */
 }

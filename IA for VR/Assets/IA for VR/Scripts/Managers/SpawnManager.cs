@@ -56,10 +56,19 @@ public class SpawnManager : MonoBehaviour
     void SpawnPlayerShips()
     {
         GameObject ship;
-        Transform spawnpointTransform = gm.PlayerNodes[0].transform.Find("SpawnPoint");
-        ship = Instantiate(playerShipsPref, spawnpointTransform.position, spawnpointTransform.rotation);
-        ship.transform.SetParent(spawnpointTransform);
-        gm.PlayerNodes[0].OrbitShips.Add(ship);
+
+        foreach (Player player in gm.Players)
+        {
+            foreach(Node node in player.PlayerNodes)
+            {
+                Transform spawnpointTransform = node.transform.Find("SpawnPoint");
+                ship = Instantiate(playerShipsPref, spawnpointTransform.position, spawnpointTransform.rotation);
+                ship.transform.SetParent(spawnpointTransform);
+                node.OrbitShips.Add(ship);
+            }
+        }
+
+        
     }
 
     

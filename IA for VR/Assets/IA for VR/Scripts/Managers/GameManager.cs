@@ -12,8 +12,8 @@ public class GameManager : MonoBehaviour
     [Header("Lista de jugadores")]
     [SerializeField] private List<Player> players;
 
-
-
+    //Accesores
+    public List<Player> Players { get { return players; } }
 
     // Start is called before the first frame update
     void Start()
@@ -45,8 +45,6 @@ public class GameManager : MonoBehaviour
 
     public void AddPlayerNode(Node node, Player player)
     {
-        
-
         if (node.GetComponent<Renderer>() != null)
         {
             player.AddPlayerNode(node);
