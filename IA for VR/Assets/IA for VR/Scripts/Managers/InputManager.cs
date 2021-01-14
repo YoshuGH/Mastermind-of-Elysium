@@ -22,6 +22,12 @@ public class InputManager : MonoBehaviour
     private Node idleSelectedNode, selectingNodeSelectedNode;
     private bool selectingNode = false, idle = true;
 
+    //Accesores
+    public Node Idle_SelectedNode { set { idleSelectedNode = value; } get { return idleSelectedNode; } }
+    public Node Selecting_SelectedNode { set { selectingNodeSelectedNode = value; } get { return selectingNodeSelectedNode; } }
+    public int Idle_SelectedNodeIndex { set { selectingNodeSelectedNodeIndex = value; } get { return selectingNodeSelectedNodeIndex; } }
+    public int Selecting_SelectedNodeIndex { set { selectingNodeSelectedNodeIndex = value; } get { return selectingNodeSelectedNodeIndex; } }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -35,150 +41,7 @@ public class InputManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Si no esta haciendo nada, es decir, si no esta seleccionando
-        #region Idle State
-        if (idle)
-        {
-            // Al presionar la flecha itera hacia la derecha (es decir suma 1 al iterador),
-            // sobre la lista de nodos que el player posee
-            if(Input.GetKeyDown("right"))
-            {
-                if (gm.PlayerNodes.Count >= 1 && (idleSelectedNodeIndex + 1) < gm.PlayerNodes.Count)
-                {
-                    ChangeSelectedNode(gm.PlayerNodes[idleSelectedNodeIndex + 1], 0);
-                }
-                else if(gm.PlayerNodes.Count >= 1 && (idleSelectedNodeIndex + 1) >= gm.PlayerNodes.Count)
-                {
-                    ChangeSelectedNode(gm.PlayerNodes[0], 0);
-                }
-            }
-
-            // Al presionar la flecha itera hacia la izquierda (es decir resta 1 al iterador),
-            // sobre la lista de nodos que el player posee
-            if (Input.GetKeyDown("left"))
-            {
-                if (gm.PlayerNodes.Count >= 1 && (idleSelectedNodeIndex - 1) >= 0)
-                {
-                    ChangeSelectedNode(gm.PlayerNodes[idleSelectedNodeIndex - 1], 0);
-                }
-                else if (gm.PlayerNodes.Count >= 1 && (idleSelectedNodeIndex - 1) < 0)
-                {
-                    ChangeSelectedNode(gm.PlayerNodes[gm.PlayerNodes.Count -1], 0);
-                }
-            }
-
-            // Al presionar espacio entra en modo de seleccion de nodos
-            if (Input.GetKeyDown("space"))
-            {
-                selectingNode = true;
-                idle = false;
-                selecField = Instantiate(selectionField, idleSelectedNode.GetComponentInParent<Transform>().localPosition, idleSelectedNode.GetComponentInParent<Transform>().localRotation);
-                selecField.transform.localScale = new Vector3(selectionFieldScale, selectionFieldScale, selectionFieldScale);
-
-                idleSelectedNode.GetComponentInParent<Outline>().OutlineColor = selectingOutlineColor;
-
-                selectingNodeSelectedNode = idleSelectedNode.Neighbors[0];
-                selectingNodeSelectedNode.GetComponentInParent<Outline>().enabled = true;
-
-                /*Collider[] colliderTempNodes = Physics.OverlapSphere(idleSelectedNode.GetComponentInParent<Transform>().localPosition,
-                    selectionFieldScale/2, LayerMask.GetMask("Nodes"));
-
-                foreach(Collider colliderNodes in colliderTempNodes)
-                {
-                    if(colliderNodes.GetComponentInParent<Node>() != idleSelectedNode)
-                    {
-                        nodesNearbySelectedNode.Add(colliderNodes.GetComponentInParent<Node>());
-                    }
-                }
-
-                idleSelectedNode.GetComponentInParent<Outline>().OutlineColor = selectingOutlineColor;
-
-                if (nodesNearbySelectedNode.Count > 0)
-                {
-                    selectingNodeSelectedNode = nodesNearbySelectedNode[0];
-                    selectingNodeSelectedNode.GetComponentInParent<Outline>().enabled = true;
-                }
-                else { Debug.LogWarning("No nodes reachable"); }*/
-            }
-        }
-        #endregion
-
-        // Si esta seleccionando un nodo
-        #region Selecting Node State
-        else if (selectingNode)
-        {
-            // Al presionar la flecha itera hacia la derecha (es decir suma 1 al iterador),
-            // sobre la lista de nodos que haya detectado a su alrededor
-            if (Input.GetKeyDown("right"))
-            {          
-
-                if ( idleSelectedNode.Neighbors.Count >= 1 && (selectingNodeSelectedNodeIndex + 1) < idleSelectedNode.Neighbors.Count 
-                    )
-                {
-                    ChangeSelectedNode(idleSelectedNode.Neighbors[selectingNodeSelectedNodeIndex + 1], 1);
-                }
-                else if (idleSelectedNode.Neighbors.Count >= 1 && (selectingNodeSelectedNodeIndex + 1) >= idleSelectedNode.Neighbors.Count)
-                {
-                    ChangeSelectedNode(idleSelectedNode.Neighbors[0], 1);
-                }
-            }
-
-            // Al presionar la flecha itera hacia la izquierda (es decir resta 1 al iterador),
-            // sobre la lista de nodos que haya detectado a su alrededor
-            if (Input.GetKeyDown("left"))
-            {
-
-                if (idleSelectedNode.Neighbors.Count >= 1 && (selectingNodeSelectedNodeIndex - 1) >= 0)
-                {
-                    ChangeSelectedNode(idleSelectedNode.Neighbors[selectingNodeSelectedNodeIndex - 1], 1);
-                }
-                else if (idleSelectedNode.Neighbors.Count >= 1 && (selectingNodeSelectedNodeIndex - 1) < 0)
-                {
-                    ChangeSelectedNode(idleSelectedNode.Neighbors[idleSelectedNode.Neighbors.Count - 1], 1);
-                }
-            }
-
-            if(Input.GetKeyDown("enter"))
-            {
-                // Al seleccionar ese nodo se ejecuta el codigo
-                if(selectingNodeSelectedNode.teamInControl != 1)
-                {
-                    selectingNodeSelectedNode.teamInControl = 1;
-                    gm.AddPlayerNode(selectingNodeSelectedNode);
-                }
-
-                // Cancelar la seleccion
-                idle = true;
-                selectingNode = false;
-                selectingNodeSelectedNode.GetComponentInParent<Outline>().enabled = false;
-                idleSelectedNode.GetComponentInParent<Outline>().OutlineColor = Color.yellow;
-                Destroy(selecField);
-                selecField = null;
-                nodesNearbySelectedNode.Clear();
-                
-
-                idleSelectedNode.GetComponentInParent<Outline>().enabled = false;
-                idleSelectedNode = selectingNodeSelectedNode;
-                idleSelectedNodeIndex = gm.PlayerNodes.IndexOf(selectingNodeSelectedNode);
-                idleSelectedNode.GetComponentInParent<Outline>().enabled = true;
-
-                selectingNodeSelectedNode = null;
-            }
-
-            // Si vuelve a presionar espacio estando en seleccion, este cancela la seleccion
-            if (Input.GetKeyDown("space"))
-            {
-                idle = true;
-                selectingNode = false;
-                selectingNodeSelectedNode.GetComponentInParent<Outline>().enabled = false;
-                idleSelectedNode.GetComponentInParent<Outline>().OutlineColor = Color.yellow;
-                Destroy(selecField);
-                selecField = null;
-                nodesNearbySelectedNode.Clear();
-                selectingNodeSelectedNode = null;
-            }
-        }
-        #endregion
+        Inputs();
     }
 
     // Funcion que activa el Outline.cs del el primer y unico nodo al momento de iniciar el juego
@@ -212,5 +75,142 @@ public class InputManager : MonoBehaviour
                 Debug.LogError("State non existing");
                 break;
         }
+    }
+    
+    void Inputs()
+    {
+        // Si no esta haciendo nada, es decir, si no esta seleccionando
+        #region Idle State
+        if (idle)
+        {
+            // Al presionar la flecha itera hacia la derecha (es decir suma 1 al iterador),
+            // sobre la lista de nodos que el player posee
+            if (Input.GetKeyDown("right"))
+            {
+                MoveRight(idleSelectedNodeIndex, gm.PlayerNodes, 0);
+            }
+            // Al presionar la flecha itera hacia la izquierda (es decir resta 1 al iterador),
+            // sobre la lista de nodos que el player posee
+            if (Input.GetKeyDown("left"))
+            {
+                    MoveLeft(idleSelectedNodeIndex, gm.PlayerNodes, 0);
+               }
+
+            // Al presionar espacio entra en modo de seleccion de nodos
+            if (Input.GetKeyDown("space"))
+            {
+                EnterSelectMode();
+
+            }
+        }
+        #endregion
+
+        // Si esta seleccionando un nodo
+        #region Selecting Node State
+        else if (selectingNode)
+        {
+            // Al presionar la flecha itera hacia la derecha (es decir suma 1 al iterador),
+            // sobre la lista de nodos que haya detectado a su alrededor
+            if (Input.GetKeyDown("right"))
+            {
+
+                MoveRight(selectingNodeSelectedNodeIndex, idleSelectedNode.Neighbors, 1);
+            }
+
+            // Al presionar la flecha itera hacia la izquierda (es decir resta 1 al iterador),
+            // sobre la lista de nodos que haya detectado a su alrededor
+            if (Input.GetKeyDown("left"))
+            {
+                MoveLeft(selectingNodeSelectedNodeIndex, idleSelectedNode.Neighbors, 1);
+            }
+
+            if (Input.GetKeyDown("enter"))
+            {
+                SelectNode();
+            }
+
+            // Si vuelve a presionar espacio estando en seleccion, este cancela la seleccion
+            if (Input.GetKeyDown("space"))
+            {
+                ExitSelectMode();
+            }
+        }
+        #endregion
+    }
+
+    public void MoveRight(int _iterator, List<Node> _listToIterate, int _state)
+    {
+        if (_listToIterate.Count >= 1 && (_iterator + 1) < _listToIterate.Count)
+        {
+            ChangeSelectedNode(_listToIterate[_iterator + 1], _state);
+        }
+        else if (_listToIterate.Count >= 1 && (_iterator + 1) >= _listToIterate.Count)
+        {
+            ChangeSelectedNode(_listToIterate[0], _state);
+        }
+    }
+
+    public void MoveLeft( int _iterator, List<Node> _listToIterate, int _state)
+    {
+        if (_listToIterate.Count >= 1 && (_iterator - 1) >= 0)
+        {
+            ChangeSelectedNode(_listToIterate[_iterator - 1], _state);
+        }
+        else if (_listToIterate.Count >= 1 && (_iterator - 1) < 0)
+        {
+            ChangeSelectedNode(_listToIterate[_listToIterate.Count - 1], _state);
+        }
+    }
+
+    public void EnterSelectMode()
+    {
+        selectingNode = true;
+        idle = false;
+        //selecField = Instantiate(selectionField, idleSelectedNode.GetComponentInParent<Transform>().localPosition, idleSelectedNode.GetComponentInParent<Transform>().localRotation);
+        //selecField.transform.localScale = new Vector3(selectionFieldScale, selectionFieldScale, selectionFieldScale);
+
+        idleSelectedNode.GetComponentInParent<Outline>().OutlineColor = selectingOutlineColor;
+
+        selectingNodeSelectedNode = idleSelectedNode.Neighbors[0];
+        selectingNodeSelectedNode.GetComponentInParent<Outline>().enabled = true;
+    }
+
+    public void ExitSelectMode()
+    {
+        idle = true;
+        selectingNode = false;
+        selectingNodeSelectedNode.GetComponentInParent<Outline>().enabled = false;
+        idleSelectedNode.GetComponentInParent<Outline>().OutlineColor = Color.yellow;
+        //Destroy(selecField);
+        //selecField = null;
+        nodesNearbySelectedNode.Clear();
+        selectingNodeSelectedNode = null;
+    }
+
+    public void SelectNode()
+    {
+        // Al seleccionar ese nodo se ejecuta el codigo
+        if (selectingNodeSelectedNode.teamInControl != 1)
+        {
+            selectingNodeSelectedNode.teamInControl = 1;
+            gm.AddPlayerNode(selectingNodeSelectedNode);
+        }
+
+        // Cancelar la seleccion
+        idle = true;
+        selectingNode = false;
+        selectingNodeSelectedNode.GetComponentInParent<Outline>().enabled = false;
+        idleSelectedNode.GetComponentInParent<Outline>().OutlineColor = Color.yellow;
+        //Destroy(selecField);
+        //selecField = null;
+        nodesNearbySelectedNode.Clear();
+
+
+        idleSelectedNode.GetComponentInParent<Outline>().enabled = false;
+        idleSelectedNode = selectingNodeSelectedNode;
+        idleSelectedNodeIndex = gm.PlayerNodes.IndexOf(selectingNodeSelectedNode);
+        idleSelectedNode.GetComponentInParent<Outline>().enabled = true;
+
+        selectingNodeSelectedNode = null;
     }
 }
