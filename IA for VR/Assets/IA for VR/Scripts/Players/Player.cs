@@ -168,7 +168,10 @@ public class Player : MonoBehaviour
         idle = true;
         selectingNode = false;
         state = 0;
-        selectingNodeSelectedNode.GetComponentInParent<Outline>().enabled = false;
+        if(selectingNodeSelectedNode != null)
+        {
+            selectingNodeSelectedNode.GetComponentInParent<Outline>().enabled = false;
+        }
         idleSelectedNode.GetComponentInParent<Outline>().OutlineColor = Color.yellow;
         //Destroy(selecField);
         //selecField = null;
@@ -180,6 +183,7 @@ public class Player : MonoBehaviour
         idleSelectedNode.GetComponentInParent<Outline>().enabled = true;
 
         selectingNodeSelectedNode = null;
+        selectingNodeSelectedNodeIndex = 0;
     }
 
     #endregion

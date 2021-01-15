@@ -53,6 +53,7 @@ public override void Initialize()
 
     public override void CollectObservations(VectorSensor sensor)
     {
+        int missingNodesToConquist = 0;
         //Si esta en idle
         if(player.Idle)
         {
@@ -64,6 +65,15 @@ public override void Initialize()
             sensor.AddObservation(player.State);
             // Que sepa de que equipo es el nodo que esta seleccionando
             sensor.AddObservation(player.Idle_SelectedNode.teamInControl);
+            // Que sepa cuantos nodos no son de su equipo, tomando de referenci el nodo en el que esta
+            foreach(Node node in player.Idle_SelectedNode.Neighbors)
+            {
+                if(node.teamInControl != player.TeamId)
+                {
+                    missingNodesToConquist++;
+                }
+            }
+            sensor.AddObservation(missingNodesToConquist);
         }
         else if(player.SelectingNode)
         {
@@ -75,6 +85,15 @@ public override void Initialize()
             sensor.AddObservation(player.State);
             // Que sepa de que equipo es el nodo que esta seleccionando
             sensor.AddObservation(player.Selecting_SelectedNode.teamInControl);
+            // Que sepa cuantos nodos no son de su equipo, tomando de referenci el nodo en el que esta
+            foreach (Node node in player.Selecting_SelectedNode.Neighbors)
+            {
+                if (node.teamInControl != player.TeamId)
+                {
+                    missingNodesToConquist++;
+                }
+            }
+            sensor.AddObservation(missingNodesToConquist);
         }
     }
 
@@ -93,21 +112,23 @@ public override void Initialize()
         {
             // Al presionar la flecha itera hacia la derecha (es decir suma 1 al iterador),
             // sobre la lista de nodos que el player posee
-            if (Mathf.FloorToInt(vectorAction[0]) == 0)
+            if (Mathf.FloorToInt(vectorAction[0]) == 1)
             {
+                //print("Move right Idle" + player.Idle_SelectedNodeIndex);
                 player.MoveRight(player.Idle_SelectedNodeIndex, player.PlayerNodes, 0);
-                print("Move right Idle" + player.Idle_SelectedNodeIndex);
+                
             }
             // Al presionar la flecha itera hacia la izquierda (es decir resta 1 al iterador),
             // sobre la lista de nodos que el player posee
-            if (Mathf.FloorToInt(vectorAction[0]) == 1)
+            if (Mathf.FloorToInt(vectorAction[0]) == 2)
             {
+                //print("Move left Idle" + player.Idle_SelectedNodeIndex);
                 player.MoveLeft(player.Idle_SelectedNodeIndex, player.PlayerNodes, 0);
-                print("Move left Idle" + player.Idle_SelectedNodeIndex);
+                
             }
 
             // Al presionar espacio entra en modo de seleccion de nodos
-            if (Mathf.FloorToInt(vectorAction[0]) == 2)
+            if (Mathf.FloorToInt(vectorAction[0]) == 3)
             {
                 player.EnterSelectMode();
             }
@@ -120,39 +141,43 @@ public override void Initialize()
         {
             // Al presionar la flecha itera hacia la derecha (es decir suma 1 al iterador),
             // sobre la lista de nodos que haya detectado a su alrededor
-            if (Mathf.FloorToInt(vectorAction[0]) == 0)
+            if (Mathf.FloorToInt(vectorAction[0]) == 1)
             {
-                print("Move right Selecting" + (player.Selecting_SelectedNodeIndex - 1));
+                //print("Move right Selecting " + (player.Selecting_SelectedNodeIndex));
                 player.MoveRight(player.Selecting_SelectedNodeIndex, player.Idle_SelectedNode.Neighbors, 1);
                 
             }
 
             // Al presionar la flecha itera hacia la izquierda (es decir resta 1 al iterador),
             // sobre la lista de nodos que haya detectado a su alrededor
-            if (Mathf.FloorToInt(vectorAction[0]) == 1)
+            if (Mathf.FloorToInt(vectorAction[0]) == 2)
             {
-                print("Move left Selecting " + (player.Selecting_SelectedNodeIndex - 1));
+                //print("Move left Selecting " + (player.Selecting_SelectedNodeIndex));
                 player.MoveLeft(player.Selecting_SelectedNodeIndex, player.Idle_SelectedNode.Neighbors, 1);
                 
             }
 
-            if (Mathf.FloorToInt(vectorAction[0]) == 3)
+            if (Mathf.FloorToInt(vectorAction[0]) == 4)
             {
+                if(player.Selecting_SelectedNode.teamInControl != player.TeamId)
+                {
+                    AddReward(0.3f);
+                }
                 player.SelectNode();
             }
 
             // Si vuelve a presionar espacio estando en seleccion, este cancela la seleccion
-            if (Mathf.FloorToInt(vectorAction[0]) == 2)
+            if (Mathf.FloorToInt(vectorAction[0]) == 3)
             {
-                player.ExitSelectMode();
                 AddReward(-0.3f);
+                player.ExitSelectMode();
             }
         }
         #endregion
 
         if(oldPlayerNodeCount < player.PlayerNodes.Count)
         {
-            AddReward(0.1f);
+            AddReward(0.5f);
             oldPlayerNodeCount = player.PlayerNodes.Count;
         }
         else if(oldPlayerNodeCount > player.PlayerNodes.Count)
@@ -179,7 +204,7 @@ public override void Initialize()
             }
             // Al presionar la flecha itera hacia la izquierda (es decir resta 1 al iterador),
             // sobre la lista de nodos que el player posee
-            if (Input.GetKey("left"))
+            if (Input.GetKey(KeyCode.LeftArrow))
             {
                 actionsOut[0] = 2;
             }

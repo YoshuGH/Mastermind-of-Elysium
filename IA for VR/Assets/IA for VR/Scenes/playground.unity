@@ -391,7 +391,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1217960774}
-  - component: {fileID: 1217960773}
   m_Layer: 0
   m_Name: SpawnManager
   m_TagString: Untagged
@@ -399,24 +398,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!114 &1217960773
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1217960772}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5d11e6ced904064a958d2d70a219783, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  neutralShipsPref: {fileID: 1648075946743565818, guid: 92e579a5c896265428d185948476f37c,
-    type: 3}
-  playerShipsPref: {fileID: 1648075946743565818, guid: 55d8b63052a9c0b409bc745ada0b42a1,
-    type: 3}
-  initQuantityShips: 5
-  gm: {fileID: 1827076793}
 --- !u!4 &1217960774
 Transform:
   m_ObjectHideFlags: 0
@@ -498,7 +479,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1862715009}
-  - component: {fileID: 1862715008}
   m_Layer: 0
   m_Name: InputManager
   m_TagString: Untagged
@@ -506,23 +486,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!114 &1862715008
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1862715007}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: adbad567b45b5ca48ae3becb4bf9ba9a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  selectionField: {fileID: 5373383816800903429, guid: 8d9ff02325681f14bb796d4e1aeb7b80,
-    type: 3}
-  selectionFieldScale: 3.5
-  gm: {fileID: 1827076793}
-  selectingOutlineColor: {r: 1, g: 0, b: 1, a: 1}
 --- !u!4 &1862715009
 Transform:
   m_ObjectHideFlags: 0
@@ -573,12 +536,12 @@ PrefabInstance:
     - target: {fileID: 2668794290634786742, guid: c61685195324ae74da2bfe789484ac72,
         type: 3}
       propertyPath: m_BrainParameters.VectorObservationSize
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2668794290634786742, guid: c61685195324ae74da2bfe789484ac72,
         type: 3}
       propertyPath: m_BrainParameters.VectorActionSize.Array.data[0]
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2747550209227601549, guid: c61685195324ae74da2bfe789484ac72,
         type: 3}

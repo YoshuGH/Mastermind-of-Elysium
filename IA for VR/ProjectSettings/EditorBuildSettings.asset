@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
+  - enabled: 1
+    path: Assets/IA for VR/Scenes/playground.unity
+    guid: 3fd7068864ddfa446a7e02991028d51f
   m_configObjects: {}
