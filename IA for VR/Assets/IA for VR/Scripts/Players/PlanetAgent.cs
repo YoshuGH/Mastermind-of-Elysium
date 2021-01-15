@@ -36,7 +36,10 @@ public override void Initialize()
 
     public override void OnEpisodeBegin()
     {
+        player.Idle_SelectedNodeIndex = 0;
+        player.Selecting_SelectedNodeIndex = 0;
         gameManager.ResetEverything();
+        
     }
 
     private void FixedUpdate()
@@ -77,6 +80,13 @@ public override void Initialize()
 
     public override void OnActionReceived(float[] vectorAction)
     {
+        if (battleGround.NodeQty == player.PlayerNodes.Count)
+        {
+            AddReward(1.0f);
+            gameManager.MapExists = false;
+            EndEpisode();
+        }
+
         // Si no esta haciendo nada, es decir, si no esta seleccionando
         #region Idle State
         if (player.Idle)
@@ -135,6 +145,7 @@ public override void Initialize()
             if (Mathf.FloorToInt(vectorAction[0]) == 2)
             {
                 player.ExitSelectMode();
+                AddReward(-0.3f);
             }
         }
         #endregion
@@ -148,12 +159,6 @@ public override void Initialize()
         {
             AddReward(-0.3f);
             oldPlayerNodeCount = player.PlayerNodes.Count;
-        }
-
-        if(battleGround.NodeQty == player.PlayerNodes.Count)
-        {
-            AddReward(1f);
-            EndEpisode();
         }
 
     }

@@ -16,7 +16,8 @@ public class GameManager : MonoBehaviour
 
     //Accesores
     public List<Player> Players { get { return players; } }
-    public bool MapExists { get { return mapExists; } }
+    public bool MapExists { get { return mapExists; } set{ mapExists = value; } }
+  
 
 
     private void Awake() {
