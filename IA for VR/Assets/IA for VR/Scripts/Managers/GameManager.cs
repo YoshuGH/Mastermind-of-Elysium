@@ -12,9 +12,11 @@ public class GameManager : MonoBehaviour
     [Header("Lista de jugadores")]
     [SerializeField] private List<Player> players;
     [SerializeField]private BattleGround battleGround;
+    private bool mapExists = false;
 
     //Accesores
     public List<Player> Players { get { return players; } }
+    public bool MapExists { get { return mapExists; } }
 
 
     private void Awake() {
@@ -25,7 +27,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         // Asigna los planetas iniciales a cada team
-        Invoke("RandomSpawnTeams", 0.1f);
+        //Invoke("RandomSpawnTeams", 0.1f);
     }
 
     // Update is called once per frame
@@ -34,7 +36,7 @@ public class GameManager : MonoBehaviour
         
     }
 
-    void RandomSpawnTeams(){
+    public void RandomSpawnTeams(){
         for(int i = 0; i < players.Count; i++){
             int randomPlanetIndex;
 
@@ -46,7 +48,23 @@ public class GameManager : MonoBehaviour
             //Asignalo entonces
             battleGround.Nodes[randomPlanetIndex].teamInControl = players[i].TeamId;
             players[i].AddPlayerNode(battleGround.Nodes[randomPlanetIndex]);
+            players[i].OutlineAtStart();
         }
+        mapExists = true;
+    }
+
+    public void ResetEverything()
+    {
+        mapExists = false;
+        battleGround.RestartBG();
+
+        foreach (Player player in players)
+        {
+            player.PlayerNodes.Clear();
+        }
+
+        Invoke("RandomSpawnTeams", 0.1f);
+        //print("SpawneeTeams");
     }
 
     public void FightForNode(Node _firstNode, Node _secondNode)

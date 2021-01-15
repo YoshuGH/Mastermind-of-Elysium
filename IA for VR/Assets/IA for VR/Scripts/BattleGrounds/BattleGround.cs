@@ -9,14 +9,14 @@ public class BattleGround : MonoBehaviour
     [SerializeField]private float ResourcesRatio;
     private Transform battleGroundTransform;
     private int nodeQty;
-    public int NodeQty { get {return nodeQty; }}
+    public int NodeQty { get {return nodeQty; } set { nodeQty = value; } }
     private List<Node> nodes;
     [SerializeField]private float minDistanceBetweenNodes, maxDistanceBetweenNodes;
 
     public float bgWidth, bgLength, bgHeight;
 
     //Accesores
-    public List<Node> Nodes { get { return nodes; } }
+    public List<Node> Nodes { get { return nodes; } set { nodes = value; } }
     
     private void Awake() {
         battleGroundTransform = this.transform;
@@ -48,7 +48,7 @@ public class BattleGround : MonoBehaviour
         }
     }
 
-    private void InitBattlegroundGraph()
+    public void InitBattlegroundGraph()
     {
         Vector3 spawnNodePoint = RandomUniformPointInSphere(new Vector3(0f, bgHeight/2, 0f));
         Node tempNode;
@@ -57,7 +57,7 @@ public class BattleGround : MonoBehaviour
         for(int i = 0; i < nodeQty; i++){
             if(i == 0){ //Primer nodo
                 tempNode = Instantiate(ChooseTypeOfPlanet(), spawnNodePoint, Quaternion.identity, battleGroundTransform).GetComponent<Node>();
-                //tempNode.teamInControl = 1;
+                tempNode.teamInControl = 1;
                 nodes.Add(tempNode); 
             }
 
@@ -86,6 +86,27 @@ public class BattleGround : MonoBehaviour
         }
 
         NormalizeBattleGroundGraph();
+    }
+
+    void ClearBattleGround()
+    {
+        if(nodes.Count > 0)
+        {
+            foreach (Node node in nodes)
+            {
+                Destroy(node.GetComponentInParent<Transform>().gameObject);
+            }
+            nodeQty = 0;
+            nodes.Clear();
+        }
+    }
+
+    public void RestartBG()
+    {
+        ClearBattleGround();
+
+        nodeQty = GenerateRandomNodeQty(2);
+        InitBattlegroundGraph();
     }
 
     private void NormalizeBattleGroundGraph(){
@@ -151,7 +172,7 @@ public class BattleGround : MonoBehaviour
             }
         }
     }
-
+    
     private bool CanSpawnANode(Vector3 _pos){
         Collider[] hitColliders = Physics.OverlapSphere(_pos, minDistanceBetweenNodes);
 
@@ -164,7 +185,6 @@ public class BattleGround : MonoBehaviour
     private Vector3 RandomUniformPointInSphere(Vector3 _pos){
             return (Random.insideUnitSphere * Mathf.Sqrt(Random.Range(0f, 1f))) * maxDistanceBetweenNodes + _pos;
     }
-    
 
     private GameObject ChooseTypeOfPlanet(){
         if(Random.value > ResourcesRatio)
