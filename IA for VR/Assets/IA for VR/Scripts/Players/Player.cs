@@ -15,8 +15,6 @@ public class Player : MonoBehaviour
     public int MaxshipsQty { get { return maxShipsQty; } }
     private int resources;
     public int Resources { get { return resources; } }
-    private int state = 0;
-    public int State { get { return state; } }
 
     public void AddResources(int _resourcesQty) => resources += _resourcesQty;
 
@@ -49,16 +47,14 @@ public class Player : MonoBehaviour
     //Accesores del Input Manager
     public Node Idle_SelectedNode { set { idleSelectedNode = value; } get { return idleSelectedNode; } }
     public Node Selecting_SelectedNode { set { selectingNodeSelectedNode = value; } get { return selectingNodeSelectedNode; } }
-    public int Idle_SelectedNodeIndex { set { idleSelectedNodeIndex = value; } get { return idleSelectedNodeIndex; } }
+    public int Idle_SelectedNodeIndex { set { selectingNodeSelectedNodeIndex = value; } get { return selectingNodeSelectedNodeIndex; } }
     public int Selecting_SelectedNodeIndex { set { selectingNodeSelectedNodeIndex = value; } get { return selectingNodeSelectedNodeIndex; } }
-    public bool Idle { get { return idle; } }
-    public bool SelectingNode { get { return selectingNode; } }
 
     // Start is called before the first frame update
     void Start()
     {
         // Activar el outline de seleccion del nodo, como al principio solo hay un nodo, se activa ese nada mas
-        //Invoke("OutlineAtStart", 0.15f);
+        Invoke("OutlineAtStart", 0.15f);
     }
 
     #region Input Manager
@@ -90,7 +86,7 @@ public class Player : MonoBehaviour
     }
 
     // Funcion que activa el Outline.cs del el primer y unico nodo al momento de iniciar el juego
-    public void OutlineAtStart()
+    void OutlineAtStart()
     {
         idleSelectedNode = playerNodes[idleSelectedNodeIndex];
         idleSelectedNode.GetComponentInParent<Outline>().enabled = true;
@@ -98,7 +94,6 @@ public class Player : MonoBehaviour
 
     public void MoveRight(int _iterator, List<Node> _listToIterate, int _state)
     {
-        //print(_iterator);
         if (_listToIterate.Count >= 1 && (_iterator + 1) < _listToIterate.Count)
         {
             ChangeSelectedNode(_listToIterate[_iterator + 1], _state);
@@ -111,7 +106,6 @@ public class Player : MonoBehaviour
 
     public void MoveLeft(int _iterator, List<Node> _listToIterate, int _state)
     {
-        //print(_iterator);
         if (_listToIterate.Count >= 1 && (_iterator - 1) >= 0)
         {
             ChangeSelectedNode(_listToIterate[_iterator - 1], _state);
@@ -132,7 +126,6 @@ public class Player : MonoBehaviour
     {
         selectingNode = true;
         idle = false;
-        state = 1;
         //selecField = Instantiate(selectionField, idleSelectedNode.GetComponentInParent<Transform>().localPosition, idleSelectedNode.GetComponentInParent<Transform>().localRotation);
         //selecField.transform.localScale = new Vector3(selectionFieldScale, selectionFieldScale, selectionFieldScale);
 
@@ -146,13 +139,11 @@ public class Player : MonoBehaviour
     {
         idle = true;
         selectingNode = false;
-        state = 0;
         selectingNodeSelectedNode.GetComponentInParent<Outline>().enabled = false;
         idleSelectedNode.GetComponentInParent<Outline>().OutlineColor = Color.yellow;
         //Destroy(selecField);
         //selecField = null;
         selectingNodeSelectedNode = null;
-        selectingNodeSelectedNodeIndex = 0;
     }
 
     public void SelectNode()
@@ -167,7 +158,6 @@ public class Player : MonoBehaviour
         // Cancelar la seleccion
         idle = true;
         selectingNode = false;
-        state = 0;
         selectingNodeSelectedNode.GetComponentInParent<Outline>().enabled = false;
         idleSelectedNode.GetComponentInParent<Outline>().OutlineColor = Color.yellow;
         //Destroy(selecField);
