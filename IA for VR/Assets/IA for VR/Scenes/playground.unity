@@ -573,12 +573,12 @@ PrefabInstance:
     - target: {fileID: 2668794290634786742, guid: c61685195324ae74da2bfe789484ac72,
         type: 3}
       propertyPath: m_BrainParameters.VectorObservationSize
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2668794290634786742, guid: c61685195324ae74da2bfe789484ac72,
         type: 3}
       propertyPath: m_BrainParameters.VectorActionSize.Array.data[0]
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2747550209227601549, guid: c61685195324ae74da2bfe789484ac72,
         type: 3}
@@ -640,5 +640,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Planet Agent
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8449751398335055833, guid: c61685195324ae74da2bfe789484ac72, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: c61685195324ae74da2bfe789484ac72, type: 3}
