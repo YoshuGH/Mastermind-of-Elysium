@@ -51,11 +51,6 @@ MonoBehaviour:
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
   battleGround: {fileID: 0}
-  isNodeFree: 0
-  nodesInControl: []
-  nodeWaypoints: []
-  targetNode: {fileID: 0}
-  currentNode: {fileID: 0}
 --- !u!114 &2668794290634786742
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69,13 +64,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 1
+    VectorObservationSize: 3
     NumStackedVectorObservations: 1
-    VectorActionSize: 01000000
+    VectorActionSize: 05000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
   m_Model: {fileID: 0}
-  m_InferenceDevice: 0
+  m_InferenceDevice: 1
   m_BehaviorType: 0
   m_BehaviorName: PlanetAgent
   TeamId: 0
@@ -108,6 +103,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerNodes: []
   material: {fileID: 2100000, guid: 991f40ae0e8b1d7479a35111ab311924, type: 2}
-  teamId: 2
+  teamId: 1
   maxQtyPerNode: 0
   selectingOutlineColor: {r: 1, g: 0, b: 1, a: 1}
