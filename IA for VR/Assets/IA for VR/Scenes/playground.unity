@@ -398,7 +398,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1217960773
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -505,7 +505,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1862715008
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -550,16 +550,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 14507129}
     m_Modifications:
-    - target: {fileID: 1766348175143521959, guid: c61685195324ae74da2bfe789484ac72,
-        type: 3}
-      propertyPath: gameManager
-      value: 
-      objectReference: {fileID: 1827076793}
-    - target: {fileID: 1766348175143521959, guid: c61685195324ae74da2bfe789484ac72,
-        type: 3}
-      propertyPath: battleGround
-      value: 
-      objectReference: {fileID: 14507128}
     - target: {fileID: 2668794290634786742, guid: c61685195324ae74da2bfe789484ac72,
         type: 3}
       propertyPath: m_InferenceDevice
@@ -573,12 +563,12 @@ PrefabInstance:
     - target: {fileID: 2668794290634786742, guid: c61685195324ae74da2bfe789484ac72,
         type: 3}
       propertyPath: m_BrainParameters.VectorObservationSize
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2668794290634786742, guid: c61685195324ae74da2bfe789484ac72,
         type: 3}
       propertyPath: m_BrainParameters.VectorActionSize.Array.data[0]
-      value: 5
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2747550209227601549, guid: c61685195324ae74da2bfe789484ac72,
         type: 3}
@@ -588,17 +578,17 @@ PrefabInstance:
     - target: {fileID: 2747550209227601549, guid: c61685195324ae74da2bfe789484ac72,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 0.37737834
       objectReference: {fileID: 0}
     - target: {fileID: 2747550209227601549, guid: c61685195324ae74da2bfe789484ac72,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 3.6323261
       objectReference: {fileID: 0}
     - target: {fileID: 2747550209227601549, guid: c61685195324ae74da2bfe789484ac72,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -1.0168333
       objectReference: {fileID: 0}
     - target: {fileID: 2747550209227601549, guid: c61685195324ae74da2bfe789484ac72,
         type: 3}
