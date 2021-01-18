@@ -12,23 +12,23 @@ public class GameManager : MonoBehaviour
     [Header("Lista de jugadores")]
     [SerializeField] private List<Player> players;
     [SerializeField]private BattleGround battleGround;
-    private bool mapExists = false;
+    [SerializeField] private Material normalMat;
+
 
     //Accesores
     public List<Player> Players { get { return players; } }
-    public bool MapExists { get { return mapExists; } set{ mapExists = value; } }
+    
   
 
 
     private void Awake() {
-        
+        battleGround = GetComponentInParent<BattleGround>();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        // Asigna los planetas iniciales a cada team
-        //Invoke("RandomSpawnTeams", 0.1f);
+
     }
 
     // Update is called once per frame
@@ -37,35 +37,54 @@ public class GameManager : MonoBehaviour
         
     }
 
-    public void RandomSpawnTeams(){
-        for(int i = 0; i < players.Count; i++){
+    public void RandomSpawnTeams()
+    {
+        for (int i = 0; i < players.Count; i++)
+        {
             int randomPlanetIndex;
 
             //Esta libre
-            do {
-               randomPlanetIndex = Random.Range(0, battleGround.NodeQty - 1);
-            } while(battleGround.Nodes[randomPlanetIndex].teamInControl != 0);
-            
+            do
+            {
+                randomPlanetIndex = Random.Range(0, battleGround.NodeQty - 1);
+            } while (battleGround.Nodes[randomPlanetIndex].teamInControl != 0);
+
             //Asignalo entonces
             battleGround.Nodes[randomPlanetIndex].teamInControl = players[i].TeamId;
             players[i].AddPlayerNode(battleGround.Nodes[randomPlanetIndex]);
             players[i].OutlineAtStart();
         }
-        mapExists = true;
+        battleGround.MapExists = true;
     }
 
-    public void ResetEverything()
+    public void RestartEverything()
     {
-        mapExists = false;
-        battleGround.RestartBG();
+        //battleGround.RestartBG();
 
         foreach (Player player in players)
         {
             player.PlayerNodes.Clear();
         }
 
-        Invoke("RandomSpawnTeams", 0.1f);
-        //print("SpawneeTeams");
+        foreach(Node node in battleGround.Nodes)
+        {
+            node.teamInControl = 0;
+
+            if (node.GetComponent<Renderer>() != null)
+            {
+                Renderer rend = node.GetComponent<Renderer>();
+                rend.material = normalMat;
+            }
+            else if (node.HaveResources)
+            {
+                Renderer rend = node.transform.GetChild(0).GetComponent<Renderer>();
+                rend.material = normalMat;
+            }
+
+            node.GetComponent<Outline>().enabled = false;
+        }
+
+        Invoke("RandomSpawnTeams", 0.02f);
     }
 
     public void FightForNode(Node _firstNode, Node _secondNode)

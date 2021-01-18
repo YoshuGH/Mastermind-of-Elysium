@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 2747550209227601549}
   - component: {fileID: 1766348175143521959}
   - component: {fileID: 2668794290634786742}
-  - component: {fileID: 8449751398335055833}
   - component: {fileID: 7361287736927386810}
   m_Layer: 0
   m_Name: Planet Agent
@@ -51,6 +50,7 @@ MonoBehaviour:
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
   battleGround: {fileID: 0}
+  gameManager: {fileID: 0}
 --- !u!114 &2668794290634786742
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64,31 +64,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 3
+    VectorObservationSize: 5
     NumStackedVectorObservations: 1
     VectorActionSize: 05000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
-  m_Model: {fileID: 0}
+  m_Model: {fileID: 5022602860645237092, guid: 7a12182438e3d724ca4ce259f84bd1a1, type: 3}
   m_InferenceDevice: 1
-  m_BehaviorType: 0
+  m_BehaviorType: 2
   m_BehaviorName: PlanetAgent
   TeamId: 0
   m_UseChildSensors: 1
---- !u!114 &8449751398335055833
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6258944645048020468}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DecisionPeriod: 5
-  TakeActionsBetweenDecisions: 1
 --- !u!114 &7361287736927386810
 MonoBehaviour:
   m_ObjectHideFlags: 0

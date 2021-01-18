@@ -9,17 +9,20 @@ public class BattleGround : MonoBehaviour
     [SerializeField]private float ResourcesRatio;
     private Transform battleGroundTransform;
     private int nodeQty;
+    private bool mapExists = false;
     public int NodeQty { get {return nodeQty; } set { nodeQty = value; } }
     private List<Node> nodes;
     [SerializeField]private float minDistanceBetweenNodes, maxDistanceBetweenNodes;
-
+    private GameManager gm;
     public float bgWidth, bgLength, bgHeight;
 
     //Accesores
     public List<Node> Nodes { get { return nodes; } set { nodes = value; } }
-    
+    public bool MapExists { get { return mapExists; } set { mapExists = value; } }
+
     private void Awake() {
         battleGroundTransform = this.transform;
+        gm = GetComponentInChildren<GameManager>();
         nodeQty = GenerateRandomNodeQty(2);
         nodes = new List<Node>();
         InitBattlegroundGraph();
@@ -50,7 +53,7 @@ public class BattleGround : MonoBehaviour
 
     public void InitBattlegroundGraph()
     {
-        Vector3 spawnNodePoint = RandomUniformPointInSphere(new Vector3(0f, bgHeight/2, 0f));
+        Vector3 spawnNodePoint = RandomUniformPointInSphere(new Vector3(battleGroundTransform.position.x, bgHeight/2, battleGroundTransform.position.z));
         Node tempNode;
         int currentNodes = nodes.Count;
 
@@ -94,6 +97,7 @@ public class BattleGround : MonoBehaviour
         {
             foreach (Node node in nodes)
             {
+                node.Neighbors.Clear();
                 Destroy(node.GetComponentInParent<Transform>().gameObject);
             }
             nodeQty = 0;
@@ -103,6 +107,7 @@ public class BattleGround : MonoBehaviour
 
     public void RestartBG()
     {
+        mapExists = false;
         ClearBattleGround();
 
         nodeQty = GenerateRandomNodeQty(2);
