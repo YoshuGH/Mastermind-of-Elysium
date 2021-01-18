@@ -26,12 +26,14 @@ public class Player : MonoBehaviour
          if (node.GetComponent<Renderer>() != null)
         {
             playerNodes.Add(node);
+            node.teamInControl = teamId;
             Renderer rend = node.GetComponent<Renderer>();
             rend.material = material;
         }
         else if(node.HaveResources)
         {
             playerNodes.Add(node);
+            node.teamInControl = teamId;
             Renderer rend = node.transform.GetChild(0).GetComponent<Renderer>();
             rend.material = material;
         }
@@ -157,33 +159,57 @@ public class Player : MonoBehaviour
 
     public void SelectNode()
     {
-        // Al seleccionar ese nodo se ejecuta el codigo
-        if (selectingNodeSelectedNode.teamInControl != 1)
+        // Al seleccionar ese nodo y este sea del diferente del equipo del jugador se ejecuta
+        if (selectingNodeSelectedNode.teamInControl != teamId)
         {
-            selectingNodeSelectedNode.teamInControl = 1;
-            AddPlayerNode(selectingNodeSelectedNode);
-        }
+            //Si no se esta conquistando se manda a llamar a la corrutina del nodo para conquistarlo, este proceso tarda 3s
+            if (selectingNodeSelectedNode.CanConquisting)
+            {
+                StartCoroutine(selectingNodeSelectedNode.CaptureTimeDown(teamId, selectingNodeSelectedNode, this));
+                selectingNodeSelectedNode.CanConquisting = false;
+            }
 
-        // Cancelar la seleccion
-        idle = true;
-        selectingNode = false;
-        state = 0;
-        if(selectingNodeSelectedNode != null)
+            //Resetear las referencias visuales
+            if (selectingNodeSelectedNode != null)
+            {
+                selectingNodeSelectedNode.GetComponent<Outline>().enabled = false;
+            }
+            idleSelectedNode.GetComponent<Outline>().OutlineColor = Color.yellow;
+
+            //Resetear el Selecting Node
+            selectingNodeSelectedNode = null;
+            selectingNodeSelectedNodeIndex = 0;
+
+            // Cancelar la seleccion
+            idle = true;
+            selectingNode = false;
+            state = 0;
+        }
+        // Al seleccionar un nodo que sea de mi equipo, me transportare a el
+        else if (selectingNodeSelectedNode.teamInControl == teamId)
         {
-            selectingNodeSelectedNode.GetComponentInParent<Outline>().enabled = false;
+            // Resetear las referencias visuales
+            if (selectingNodeSelectedNode != null)
+            {
+                selectingNodeSelectedNode.GetComponent<Outline>().enabled = false;
+            }
+            idleSelectedNode.GetComponent<Outline>().OutlineColor = Color.yellow;
+
+            // Moverme hacia el nodo seleccionado
+            idleSelectedNode.GetComponentInParent<Outline>().enabled = false;
+            idleSelectedNode = selectingNodeSelectedNode;
+            idleSelectedNodeIndex = playerNodes.IndexOf(selectingNodeSelectedNode);
+            idleSelectedNode.GetComponentInParent<Outline>().enabled = true;
+
+            //Resetear el Selecting Node
+            selectingNodeSelectedNode = null;
+            selectingNodeSelectedNodeIndex = 0;
+
+            // Cancelar la seleccion
+            idle = true;
+            selectingNode = false;
+            state = 0;
         }
-        idleSelectedNode.GetComponentInParent<Outline>().OutlineColor = Color.yellow;
-        //Destroy(selecField);
-        //selecField = null;
-
-
-        idleSelectedNode.GetComponentInParent<Outline>().enabled = false;
-        idleSelectedNode = selectingNodeSelectedNode;
-        idleSelectedNodeIndex = playerNodes.IndexOf(selectingNodeSelectedNode);
-        idleSelectedNode.GetComponentInParent<Outline>().enabled = true;
-
-        selectingNodeSelectedNode = null;
-        selectingNodeSelectedNodeIndex = 0;
     }
 
     #endregion

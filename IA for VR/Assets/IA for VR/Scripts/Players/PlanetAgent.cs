@@ -92,15 +92,20 @@ public class PlanetAgent : Agent
 
     public override void OnActionReceived(float[] vectorAction)
     {
+        // Se le quita recompensa por tiempo para que la IA no se quede sin hacer nada
         if(battleGround.MapExists)
         {
             this.AddReward(-0.0001f * Time.deltaTime);
         }
 
+        // Si la IA ya conquisto todos los nodos
         if (battleGround.NodeQty == player.PlayerNodes.Count)
         {
+            // Hace que la IA deje de ejecutar acciones al no existir el mapa
             battleGround.MapExists = false;
-            SetReward(25.0f);
+            // La recompensa por haber terminado de manera exitosa
+            SetReward(5.0f);
+            // Acaba el episodio y comienza todo de nuevo
             EndEpisode();
         }
 
@@ -137,10 +142,10 @@ public class PlanetAgent : Agent
             // Al presionar espacio entra en modo de seleccion de nodos
             if (Mathf.FloorToInt(vectorAction[0]) == 3 && battleGround.MapExists)
             {
-
+                // Se le recompensa por entrar en seleccion en un nodo que tiene nodos por conquitar
                 if (haveNodeToConquist)
                 {
-                    AddReward(0.5f);
+                    AddReward(0.0005f);
                 }
 
                 player.EnterSelectMode();
@@ -156,41 +161,36 @@ public class PlanetAgent : Agent
             // sobre la lista de nodos que haya detectado a su alrededor
             if (Mathf.FloorToInt(vectorAction[0]) == 1 && battleGround.MapExists)
             {
-                //print("Move right Selecting " + (player.Selecting_SelectedNodeIndex));
                 player.MoveRight(player.Selecting_SelectedNodeIndex, player.Idle_SelectedNode.Neighbors, 1);
-
-                //Se recompensa a la IA al moverse a un nodo que no es de su equipo, se le recompensa muy poco para que no abuse de esto
-                if (isNodeFree)
-                {
-                    AddReward(0.0001f);
-                }
             }
 
             // Al presionar la flecha itera hacia la izquierda (es decir resta 1 al iterador),
             // sobre la lista de nodos que haya detectado a su alrededor
             if (Mathf.FloorToInt(vectorAction[0]) == 2 && battleGround.MapExists)
             {
-                //print("Move left Selecting " + (player.Selecting_SelectedNodeIndex));
                 player.MoveLeft(player.Selecting_SelectedNodeIndex, player.Idle_SelectedNode.Neighbors, 1);
-
-                //Se recompensa a la IA al moverse a un nodo que no es de su equipo, se le recompensa muy poco para que no abuse de esto
-                if (isNodeFree)
-                {
-                    AddReward(0.0001f);
-                }
             }
 
+            // En esta accion es cuando selecciona un nodo
             if (Mathf.FloorToInt(vectorAction[0]) == 4 && battleGround.MapExists)
             {
+                // Por seleccionar un nodo se le recompensa
                 AddReward(1f);
-
-                if (player.Selecting_SelectedNode.teamInControl != player.TeamId)
+                
+                // Si selecciona un nodo que no es de su equipo y se puede conquistar se le recompensa aun mas
+                if (player.Selecting_SelectedNode.CanConquisting && player.Selecting_SelectedNode.teamInControl != player.TeamId)
                 {
                     AddReward(0.8f);
                 }
+                // Si selecciona un nodo que no es de su equipo pero esta en proceso de conquista se le castiga, para que no abuse de esto
+                else if (!player.Selecting_SelectedNode.CanConquisting && player.Selecting_SelectedNode.teamInControl != player.TeamId)
+                {
+                    AddReward(-1.1f);
+                }
+                // Si selecciona un nodo de su mismo equipo se le castiga
                 else if(player.Selecting_SelectedNode.teamInControl == player.TeamId)
                 {
-                    AddReward(-1.35f);
+                    AddReward(-1.3f);
                 }
                 
                 player.SelectNode();
@@ -201,11 +201,6 @@ public class PlanetAgent : Agent
             {
                 AddReward(-0.3f);
                 player.ExitSelectMode();
-            }
-            
-            if(battleGround.MapExists && player.Selecting_SelectedNode != null && player.Selecting_SelectedNode.teamInControl != player.TeamId)
-            {
-                AddReward(0.01f);
             }
         }
         #endregion
