@@ -19,13 +19,14 @@ public class Player : MonoBehaviour
     public int Resources { get { return resources; } }
     private int state = 0;
     public int State { get { return state; } }
+    public bool withOutline = true;
 
     public void AddResources(int _resourcesQty) => resources += _resourcesQty;
 
     public void UpdateMaxShipQty() => maxShipsQty  = playerNodes.Count * maxQtyPerNode;
 
     public void AddPlayerNode (Node node) {
-         if (node.GetComponent<Renderer>() != null)
+        if (node.GetComponent<Renderer>() != null)
         {
             playerNodes.Add(node);
             node.teamInControl = teamId;
@@ -76,16 +77,33 @@ public class Player : MonoBehaviour
         switch (_state)
         {
             case 0:
-                idleSelectedNode.GetComponentInParent<Outline>().enabled = false;
-                idleSelectedNode = _nextNode;
-                idleSelectedNodeIndex = playerNodes.IndexOf(_nextNode);
-                idleSelectedNode.GetComponentInParent<Outline>().enabled = true;
+                if(withOutline)
+                {
+                    idleSelectedNode.GetComponentInParent<Outline>().enabled = false;
+                    idleSelectedNode = _nextNode;
+                    idleSelectedNodeIndex = playerNodes.IndexOf(_nextNode);
+                    idleSelectedNode.GetComponentInParent<Outline>().enabled = true;
+                }
+                else
+                {
+                    idleSelectedNode = _nextNode;
+                    idleSelectedNodeIndex = playerNodes.IndexOf(_nextNode);
+                }
+                
                 break;
             case 1:
-                selectingNodeSelectedNode.GetComponentInParent<Outline>().enabled = false;
-                selectingNodeSelectedNode = _nextNode;
-                selectingNodeSelectedNodeIndex = idleSelectedNode.Neighbors.IndexOf(_nextNode);
-                selectingNodeSelectedNode.GetComponentInParent<Outline>().enabled = true;
+                if(withOutline)
+                {
+                    selectingNodeSelectedNode.GetComponentInParent<Outline>().enabled = false;
+                    selectingNodeSelectedNode = _nextNode;
+                    selectingNodeSelectedNodeIndex = idleSelectedNode.Neighbors.IndexOf(_nextNode);
+                    selectingNodeSelectedNode.GetComponentInParent<Outline>().enabled = true;
+                }
+                else
+                {
+                    selectingNodeSelectedNode = _nextNode;
+                    selectingNodeSelectedNodeIndex = idleSelectedNode.Neighbors.IndexOf(_nextNode);
+                }
                 break;
             default:
                 Debug.LogError("State non existing");
@@ -98,7 +116,10 @@ public class Player : MonoBehaviour
     {
         idleSelectedNodeIndex = 0;
         idleSelectedNode = playerNodes[idleSelectedNodeIndex];
-        idleSelectedNode.GetComponentInParent<Outline>().enabled = true;
+        if(withOutline)
+        {
+            idleSelectedNode.GetComponentInParent<Outline>().enabled = true;
+        }
     }
 
     public void MoveRight(int _iterator, List<Node> _listToIterate, int _state)
@@ -141,10 +162,13 @@ public class Player : MonoBehaviour
         //selecField = Instantiate(selectionField, idleSelectedNode.GetComponentInParent<Transform>().localPosition, idleSelectedNode.GetComponentInParent<Transform>().localRotation);
         //selecField.transform.localScale = new Vector3(selectionFieldScale, selectionFieldScale, selectionFieldScale);
 
-        idleSelectedNode.GetComponentInParent<Outline>().OutlineColor = selectingOutlineColor;
-
         selectingNodeSelectedNode = idleSelectedNode.Neighbors[0];
-        selectingNodeSelectedNode.GetComponentInParent<Outline>().enabled = true;
+
+        if(withOutline)
+        {
+            idleSelectedNode.GetComponentInParent<Outline>().OutlineColor = selectingOutlineColor;
+            selectingNodeSelectedNode.GetComponentInParent<Outline>().enabled = true;
+        }
     }
 
     public void ExitSelectMode()
@@ -152,8 +176,12 @@ public class Player : MonoBehaviour
         idle = true;
         selectingNode = false;
         state = 0;
-        selectingNodeSelectedNode.GetComponentInParent<Outline>().enabled = false;
-        idleSelectedNode.GetComponentInParent<Outline>().OutlineColor = Color.yellow;
+        if(withOutline)
+        {
+            selectingNodeSelectedNode.GetComponentInParent<Outline>().enabled = false;
+            idleSelectedNode.GetComponentInParent<Outline>().OutlineColor = Color.yellow;
+        }
+     
         //Destroy(selecField);
         //selecField = null;
         selectingNodeSelectedNode = null;
@@ -176,11 +204,14 @@ public class Player : MonoBehaviour
             }
 
             //Resetear las referencias visuales
-            if (selectingNodeSelectedNode != null)
+            if(withOutline)
             {
-                selectingNodeSelectedNode.GetComponent<Outline>().enabled = false;
+                if (selectingNodeSelectedNode != null)
+                {
+                    selectingNodeSelectedNode.GetComponent<Outline>().enabled = false;
+                }
+                idleSelectedNode.GetComponent<Outline>().OutlineColor = Color.yellow;
             }
-            idleSelectedNode.GetComponent<Outline>().OutlineColor = Color.yellow;
 
             //Resetear el Selecting Node
             selectingNodeSelectedNode = null;
@@ -195,17 +226,29 @@ public class Player : MonoBehaviour
         else if (selectingNodeSelectedNode.teamInControl == teamId)
         {
             // Resetear las referencias visuales
-            if (selectingNodeSelectedNode != null)
+            if(withOutline)
             {
-                selectingNodeSelectedNode.GetComponent<Outline>().enabled = false;
+                if (selectingNodeSelectedNode != null)
+                {
+                    selectingNodeSelectedNode.GetComponent<Outline>().enabled = false;
+                }
+                idleSelectedNode.GetComponent<Outline>().OutlineColor = Color.yellow;
             }
-            idleSelectedNode.GetComponent<Outline>().OutlineColor = Color.yellow;
 
             // Moverme hacia el nodo seleccionado
-            idleSelectedNode.GetComponentInParent<Outline>().enabled = false;
-            idleSelectedNode = selectingNodeSelectedNode;
-            idleSelectedNodeIndex = playerNodes.IndexOf(selectingNodeSelectedNode);
-            idleSelectedNode.GetComponentInParent<Outline>().enabled = true;
+            if(withOutline)
+            {
+                idleSelectedNode.GetComponentInParent<Outline>().enabled = false;
+                idleSelectedNode = selectingNodeSelectedNode;
+                idleSelectedNodeIndex = playerNodes.IndexOf(selectingNodeSelectedNode);
+                idleSelectedNode.GetComponentInParent<Outline>().enabled = true;
+            }
+            else
+            {
+                idleSelectedNode = selectingNodeSelectedNode;
+                idleSelectedNodeIndex = playerNodes.IndexOf(selectingNodeSelectedNode);
+            }
+            
 
             //Resetear el Selecting Node
             selectingNodeSelectedNode = null;

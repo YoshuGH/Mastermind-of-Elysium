@@ -18,9 +18,8 @@ public class PlanetAgent : Agent
     private int oldPlayerNodeCount;
     private bool haveNodeToConquist = false;
     private bool isNodeFree;
-    private int wins = 0;
-
-    public Text winsText;
+    /*private int wins = 0
+    public Text winsText;*/
 
     private void Awake()
     {
@@ -110,8 +109,8 @@ public class PlanetAgent : Agent
             // Hace que los equipos puedan generarse una vez nada mas
             gameManager.spawnOnce = true;
             // Añade un punto de victoria para esta IA
-            wins++;
-            winsText.text = wins.ToString();
+            //wins++;
+            //winsText.text = wins.ToString();
             // La recompensa por haber terminado de manera exitosa
             SetReward(10.0f);
             // Acaba el episodio y comienza todo de nuevo

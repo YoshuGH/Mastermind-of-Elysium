@@ -96,7 +96,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &9115858481362734288
 RectTransform:
   m_ObjectHideFlags: 0
@@ -396,6 +396,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Planet Agent (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 6258944645048020468, guid: c61685195324ae74da2bfe789484ac72,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7361287736927386810, guid: c61685195324ae74da2bfe789484ac72,
         type: 3}
       propertyPath: teamId
@@ -414,18 +419,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2769833881125906988}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4636703261047854742 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7361287736927386810, guid: c61685195324ae74da2bfe789484ac72,
-    type: 3}
-  m_PrefabInstance: {fileID: 2769833881125906988}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4bf116d487aeb5741bb566c5666e1682, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &3402923487579818125
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -457,7 +450,7 @@ PrefabInstance:
         type: 3}
       propertyPath: players.Array.data[1]
       value: 
-      objectReference: {fileID: 4636703261047854742}
+      objectReference: {fileID: 0}
     - target: {fileID: 2716894255403300345, guid: ae61bf69f94e7ed47a28aa6a35a2c34e,
         type: 3}
       propertyPath: m_RootOrder
@@ -532,7 +525,7 @@ PrefabInstance:
         type: 3}
       propertyPath: winsText
       value: 
-      objectReference: {fileID: 4293800043413226770}
+      objectReference: {fileID: 0}
     - target: {fileID: 2668794290634786742, guid: c61685195324ae74da2bfe789484ac72,
         type: 3}
       propertyPath: m_Model
@@ -598,6 +591,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Planet Agent
+      objectReference: {fileID: 0}
+    - target: {fileID: 7361287736927386810, guid: c61685195324ae74da2bfe789484ac72,
+        type: 3}
+      propertyPath: withOutline
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c61685195324ae74da2bfe789484ac72, type: 3}
