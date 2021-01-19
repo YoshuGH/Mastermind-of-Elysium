@@ -200,6 +200,7 @@ public class Player : MonoBehaviour
                 /*Instantiate(holderTimer, selectingNodeSelectedNode.transform.position + new Vector3(0,1,0), Quaternion.identity);
                 StartCoroutine(Esperar());*/
                 StartCoroutine(selectingNodeSelectedNode.CaptureTimeDown(teamId, selectingNodeSelectedNode, this));
+                selectingNodeSelectedNode.GetComponentInParent<Transform>().Find("FightFX").gameObject.SetActive(true);
                 selectingNodeSelectedNode.CanConquisting = false;
             }
 

@@ -1,19 +1,9 @@
 fileFormatVersion: 2
-guid: faffc90c00f9fb849903bff841459ea7
+guid: 8674375e01eb32f42a03d3d7feea9631
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Material
-    second: {fileID: 2100000, guid: ec336abec0e589840a5b94b01a530060, type: 2}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: SpaceshipMastermindOfElysium
-    second: {fileID: 2800000, guid: 907b652442f9fc3468102c6fcb88e2c7, type: 3}
+  externalObjects: {}
   materials:
     materialImportMode: 1
     materialName: 0

@@ -24,7 +24,8 @@ public class Node :  MonoBehaviour
         //Conquista el nodo
         Node tempNode = _nodeToCapture;
         _player.AddPlayerNode(tempNode);
-        
+        // Desactiva los Particle Systems
+        tempNode.transform.Find("FightFX").gameObject.SetActive(false);
         //Resetear Variable de acceso
         canConquisting = true;
     }
