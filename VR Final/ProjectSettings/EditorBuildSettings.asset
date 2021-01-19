@@ -9,11 +9,11 @@ EditorBuildSettings:
     path: Assets/Lazerbait Robao/Scenes/Menu_Scene.unity
     guid: 829a86ba161cdd840842063447f41aab
   - enabled: 1
-    path: Assets/Lazerbait Robao/Scenes/IA.unity
-    guid: a06f9c32976b4ac4f8f734c157b951d9
-  - enabled: 1
     path: Assets/Lazerbait Robao/Scenes/si.unity
     guid: 6e575454ac177714382b288c5906e004
+  - enabled: 1
+    path: Assets/IA for VR/Scenes/playground.unity
+    guid: 3fd7068864ddfa446a7e02991028d51f
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 6c1ba29fadd810548a53d90be0ecf570,
       type: 2}
