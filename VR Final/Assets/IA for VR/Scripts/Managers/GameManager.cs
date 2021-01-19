@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
 
     // Variables publicas
     public bool spawnOnce = true;
+    public bool justOnePlayer = false;
 
     //Accesores
     public List<Player> Players { get { return players; } }
@@ -30,7 +31,10 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        if(justOnePlayer)
+        {
+            Invoke("RandomSpawnTeams", 0.02f);
+        }
     }
 
     // Update is called once per frame
