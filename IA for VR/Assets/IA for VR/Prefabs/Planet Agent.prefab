@@ -51,6 +51,7 @@ MonoBehaviour:
   MaxStep: 0
   battleGround: {fileID: 0}
   gameManager: {fileID: 0}
+  winsText: {fileID: 0}
 --- !u!114 &2668794290634786742
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69,7 +70,7 @@ MonoBehaviour:
     VectorActionSize: 05000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
-  m_Model: {fileID: 0}
+  m_Model: {fileID: 5022602860645237092, guid: 75b69c69e78d010428606780bd97192e, type: 3}
   m_InferenceDevice: 1
   m_BehaviorType: 0
   m_BehaviorName: PlanetAgent
@@ -89,6 +90,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerNodes: []
   material: {fileID: 2100000, guid: 991f40ae0e8b1d7479a35111ab311924, type: 2}
+  holderTimer: {fileID: 2538377720330763745, guid: 5dc324a477f80e04a97df6cd66358975,
+    type: 3}
   teamId: 1
   maxQtyPerNode: 0
   selectingOutlineColor: {r: 1, g: 0, b: 1, a: 1}

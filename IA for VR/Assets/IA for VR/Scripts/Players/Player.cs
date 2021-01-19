@@ -7,6 +7,8 @@ public class Player : MonoBehaviour
     [SerializeField]private List<Node> playerNodes;
     //private List<Ships> currentShips;
     public Material material;
+    //public GameObject holderTimer;
+    //bool spawn = false;
     //public bool isIA;
     [SerializeField]private int teamId;
     public int TeamId {  get {  return teamId; } }
@@ -94,6 +96,7 @@ public class Player : MonoBehaviour
     // Funcion que activa el Outline.cs del el primer y unico nodo al momento de iniciar el juego
     public void OutlineAtStart()
     {
+        idleSelectedNodeIndex = 0;
         idleSelectedNode = playerNodes[idleSelectedNodeIndex];
         idleSelectedNode.GetComponentInParent<Outline>().enabled = true;
     }
@@ -165,6 +168,9 @@ public class Player : MonoBehaviour
             //Si no se esta conquistando se manda a llamar a la corrutina del nodo para conquistarlo, este proceso tarda 3s
             if (selectingNodeSelectedNode.CanConquisting)
             {
+                
+                /*Instantiate(holderTimer, selectingNodeSelectedNode.transform.position + new Vector3(0,1,0), Quaternion.identity);
+                StartCoroutine(Esperar());*/
                 StartCoroutine(selectingNodeSelectedNode.CaptureTimeDown(teamId, selectingNodeSelectedNode, this));
                 selectingNodeSelectedNode.CanConquisting = false;
             }
@@ -213,4 +219,10 @@ public class Player : MonoBehaviour
     }
 
     #endregion
+
+    /*IEnumerator Esperar()
+    {
+        yield return new WaitForSecondsRealtime(3.0f);
+        Destroy(holderTimer.gameObject);
+    }*/
 }

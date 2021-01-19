@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
     [SerializeField]private BattleGround battleGround;
     [SerializeField] private Material normalMat;
 
+    // Variables publicas
+    public bool spawnOnce = true;
 
     //Accesores
     public List<Player> Players { get { return players; } }
@@ -39,22 +41,26 @@ public class GameManager : MonoBehaviour
 
     public void RandomSpawnTeams()
     {
-        for (int i = 0; i < players.Count; i++)
+        if(spawnOnce)
         {
-            int randomPlanetIndex;
-
-            //Esta libre
-            do
+            for (int i = 0; i < players.Count; i++)
             {
-                randomPlanetIndex = Random.Range(0, battleGround.NodeQty - 1);
-            } while (battleGround.Nodes[randomPlanetIndex].teamInControl != 0);
+                int randomPlanetIndex;
 
-            //Asignalo entonces
-            battleGround.Nodes[randomPlanetIndex].teamInControl = players[i].TeamId;
-            players[i].AddPlayerNode(battleGround.Nodes[randomPlanetIndex]);
-            players[i].OutlineAtStart();
+                //Esta libre
+                do
+                {
+                    randomPlanetIndex = Random.Range(0, battleGround.NodeQty - 1);
+                } while (battleGround.Nodes[randomPlanetIndex].teamInControl != 0);
+
+                //Asignalo entonces
+                battleGround.Nodes[randomPlanetIndex].teamInControl = players[i].TeamId;
+                players[i].AddPlayerNode(battleGround.Nodes[randomPlanetIndex]);
+                players[i].OutlineAtStart();
+            }
+            battleGround.MapExists = true;
+            spawnOnce = false;
         }
-        battleGround.MapExists = true;
     }
 
     public void RestartEverything()

@@ -19,7 +19,7 @@ public class Node :  MonoBehaviour
 
     public IEnumerator CaptureTimeDown( int _playerId, Node _nodeToCapture, Player _player)
     {
-        yield return new WaitForSeconds(3.0f);
+        yield return new WaitForSecondsRealtime(3.0f);
 
         //Conquista el nodo
         Node tempNode = _nodeToCapture;
